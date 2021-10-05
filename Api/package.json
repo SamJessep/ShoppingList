@@ -1,0 +1,20 @@
+{
+  "name": "shopping-list-api",
+  "version": "1.0.0",
+  "description": "api for shopping list react native app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "Sam Jessep",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^20.2.0",
+    "@prisma/client": "^3.1.1"
+  },
+  "devDependencies": {
+    "prisma": "^3.1.1"
+  }
+}
