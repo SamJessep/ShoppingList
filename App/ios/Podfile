@@ -14,6 +14,8 @@ target 'ShoppingList' do
 
   pod 'RNOS', :path => '../node_modules/react-native-os'
 
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
   target 'ShoppingListTests' do
     inherit! :complete
     # Pods for testing

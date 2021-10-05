@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // react-native-auth0
 import com.auth0.react.A0Auth0Package;
+// react-native-config
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 // react-native-os
 import com.peel.react.rnos.RNOSModule;
 // react-native-safe-area-context
@@ -68,6 +70,7 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new AsyncStoragePackage(),
       new A0Auth0Package(),
+      new ReactNativeConfigPackage(),
       new RNOSModule(),
       new SafeAreaContextPackage(),
       new RNScreensPackage()

@@ -9,118 +9,118 @@
 9        android:targetSdkVersion="30" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-11-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\debug\AndroidManifest.xml:5:5-77
-11-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\debug\AndroidManifest.xml:5:22-75
+11-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\AndroidManifest.xml:5:5-77
+11-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\AndroidManifest.xml:5:22-75
 12    <uses-permission android:name="android.permission.INTERNET" />
-12-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:4:5-67
-12-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:4:22-64
+12-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:4:5-67
+12-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:4:22-64
 13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 13-->[com.facebook.flipper:flipper:0.93.0] C:\Users\Sam\.gradle\caches\transforms-3\8cf55bdce16a002612f05f30a64a017a\transformed\jetified-flipper-0.93.0\AndroidManifest.xml:16:5-76
 13-->[com.facebook.flipper:flipper:0.93.0] C:\Users\Sam\.gradle\caches\transforms-3\8cf55bdce16a002612f05f30a64a017a\transformed\jetified-flipper-0.93.0\AndroidManifest.xml:16:22-73
 14
 15    <queries>
-15-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:5-22:15
+15-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:5-22:15
 16        <intent>
-16-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:9-21:18
+16-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:9-21:18
 17            <action android:name="android.intent.action.VIEW" />
-17-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-65
-17-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:21-62
+17-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-65
+17-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:21-62
 18
 19            <category android:name="android.intent.category.BROWSABLE" />
-19-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-74
-19-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:23-71
+19-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-74
+19-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:23-71
 20
 21            <data android:scheme="https" />
-21-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-44
-21-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:19-41
+21-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-44
+21-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:19-41
 22        </intent>
 23    </queries>
 24
 25    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-25-->[:react-native-os] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
-25-->[:react-native-os] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-76
+25-->[:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
+25-->[:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-76
 26
 27    <application
-27-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:6:5-24:19
+27-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:6:5-24:19
 28        android:name="com.shoppinglist.MainApplication"
-28-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:7:7-38
+28-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:7:7-38
 29        android:allowBackup="false"
-29-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:11:7-34
+29-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:11:7-34
 30        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 30-->[androidx.core:core:1.1.0] C:\Users\Sam\.gradle\caches\transforms-3\384a804ddf61add8f1298a3b8f500b71\transformed\core-1.1.0\AndroidManifest.xml:24:18-86
 31        android:debuggable="true"
 32        android:icon="@mipmap/ic_launcher"
-32-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:9:7-41
+32-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:9:7-41
 33        android:label="@string/app_name"
-33-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:8:7-39
+33-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:8:7-39
 34        android:roundIcon="@mipmap/ic_launcher_round"
-34-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:10:7-52
+34-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:10:7-52
 35        android:theme="@style/AppTheme"
-35-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:12:7-38
+35-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:12:7-38
 36        android:usesCleartextTraffic="true" >
-36-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\debug\AndroidManifest.xml:8:9-44
+36-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\AndroidManifest.xml:8:9-44
 37        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-37-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\debug\AndroidManifest.xml:11:9-86
-37-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\debug\AndroidManifest.xml:11:19-83
+37-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\AndroidManifest.xml:11:9-86
+37-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\AndroidManifest.xml:11:19-83
 38        <activity
-38-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:13:7-23:18
+38-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:13:7-23:18
 39            android:name="com.shoppinglist.MainActivity"
-39-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:14:9-37
+39-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:14:9-37
 40            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-40-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:16:9-86
+40-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:16:9-86
 41            android:label="@string/app_name"
-41-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:15:9-41
+41-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:15:9-41
 42            android:launchMode="singleTask"
-42-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:17:9-40
+42-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:17:9-40
 43            android:windowSoftInputMode="adjustResize" >
-43-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:18:9-51
+43-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:18:9-51
 44            <intent-filter>
-44-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:19:9-22:25
+44-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:19:9-22:25
 45                <action android:name="android.intent.action.MAIN" />
-45-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:20:13-65
-45-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:20:21-62
+45-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:20:13-65
+45-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:20:21-62
 46
 47                <category android:name="android.intent.category.LAUNCHER" />
-47-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:21:13-73
-47-->C:\Users\Sam\source\repos\ShoppingList\android\app\src\main\AndroidManifest.xml:21:23-70
+47-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:21:13-73
+47-->C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\main\AndroidManifest.xml:21:23-70
 48            </intent-filter>
 49        </activity>
 50        <activity
-50-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:9-29:75
+50-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:9-29:75
 51            android:name="com.auth0.react.AuthenticationActivity"
-51-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-66
+51-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-66
 52            android:exported="false"
-52-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-37
+52-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-37
 53            android:launchMode="singleTask"
-53-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-44
+53-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-44
 54            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-54-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-72
+54-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-72
 55        <activity
-55-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:30:9-46:20
+55-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:30:9-46:20
 56            android:name="com.auth0.react.RedirectActivity"
-56-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:31:13-60
+56-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:31:13-60
 57            android:exported="true" >
-57-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:32:13-36
+57-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:32:13-36
 58            <intent-filter android:autoVerify="true" >
-58-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:33:13-45:29
-58-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:34:17-42
+58-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:33:13-45:29
+58-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:34:17-42
 59                <action android:name="android.intent.action.VIEW" />
-59-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-65
-59-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:21-62
+59-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-65
+59-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:21-62
 60
 61                <category android:name="android.intent.category.DEFAULT" />
-61-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:17-76
-61-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:27-73
+61-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:17-76
+61-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:27-73
 62                <category android:name="android.intent.category.BROWSABLE" />
-62-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-74
-62-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:23-71
+62-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-74
+62-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:23-71
 63
 64                <data
-64-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-44
+64-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-44
 65                    android:host="dev-j0o6-3-s.au.auth0.com"
 66                    android:pathPrefix="/android/com.shoppinglist/callback"
 67                    android:scheme="com.shoppinglist" />
-67-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:19-41
+67-->[:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:19-41
 68            </intent-filter>
 69        </activity>
 70    </application>
