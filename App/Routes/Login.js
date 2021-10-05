@@ -2,12 +2,13 @@ import React from 'react'
 import { ActivityIndicator, Button, Text, View } from 'react-native';
 import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from "jwt-decode";
 
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
 const Login = ({navigation})=>{
   const [accessToken, setAccessToken] = React.useState("")
   const [errorMessage, setErrorMessage] = React.useState("")
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
+  const [isLoggedIn, setIsLoggedIn] = React.useState(null)
     const startLogin = ()=>{
       auth0
       .webAuth
@@ -15,18 +16,19 @@ const Login = ({navigation})=>{
       .then(credentials =>{
         // Successfully authenticated
         // Store the accessToken
-        const jwt = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
+        const jwt = jwt_decode(credentials.idToken)
+        console.log({id:jwt.sub, at:credentials.accessToken, rt:credentials.refreshToken})
         Promise.all([
           AsyncStorage.setItem("accessToken", credentials.accessToken),
           AsyncStorage.setItem("refreshToken", credentials.refreshToken),
           AsyncStorage.setItem("userId", jwt.sub)
         ]).then(()=>{
           setIsLoggedIn(true)
-          navigation.navigate("Landing")
+          navigation.navigate("LoadAccount")
         })
       })
       .catch(error => {
-        setErrorMessage(error)
+        setErrorMessage(error.toString())
         console.log(error)
       });
     }

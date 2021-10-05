@@ -10,6 +10,7 @@ MERGED from [com.facebook.flipper:flipper-network-plugin:0.93.0] C:\Users\Sam\.g
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.93.0] C:\Users\Sam\.gradle\caches\transforms-3\594e574e0e6998dd29b825080f234440\transformed\jetified-flipper-fresco-plugin-0.93.0\AndroidManifest.xml:8:1-15:12
 MERGED from [:react-native-config] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-config\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-async-storage_async-storage] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:4:1-49:12
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-safe-area-context] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -173,6 +174,8 @@ MERGED from [:react-native-config] C:\Users\Sam\source\repos\ShoppingList\App\no
 MERGED from [:react-native-config] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-config\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-async-storage_async-storage] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-async-storage_async-storage] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-10:41
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-10:41
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41

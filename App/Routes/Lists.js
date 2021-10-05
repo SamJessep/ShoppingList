@@ -2,45 +2,50 @@ import {View, Text, ScrollView, Button} from "react-native"
 import React from "react"
 import LISTS_DUMMY_DATA from "../dummyData.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { PrismaClient } from '@prisma/client'
-// const prisma = new PrismaClient()
+import config from "react-native-config";
+import CreateListModal from "./CreateListModal.js";
 
-const fetchUserLists = async ()=>{
-  const uid = await AsyncStorage.getItem("uid")
-  const profile = await AsyncStorage.getItem("profile").then(profileString=>JSON.parse(profileString))
-  var user = await prisma.user.findFirst({where:{id:uid}})
-  if(!user){
-    user = await prisma.user.create({data:{
-      id:uid,
-      name:profile.name,
-      email:profile.email
-    }})
-  }
-  const groups = await prisma.group.findMany({where:{members:{has:{id:uid}}}})
+const fetchUserLists = async uid=>{
+  const lists = await fetch(config.API_URL+"lists/user/"+uid).then(res=>res.json())
+  return lists
+}
+
+const fetchGroups = async uid=>{
+  console.log()
+  const groups = await fetch(config.API_URL+"groups/"+uid).then(res=>res.json())
   return groups
 }
 
 const Lists = ({navigation})=>{
   const [loading, setloading] = React.useState(true)
-  // fetchUserLists.then(usersLists=>{
-  //   lists = usersLists
-  //   setloading(false)
-  // })
-    
-  const lists = LISTS_DUMMY_DATA.lists 
-  var listsElements
+  const [lists, setLists] = React.useState([])
+  const [createListModalOpen, setCreateListModalOpen] = React.useState(false)
+  const [groups, setGroups] = React.useState([])
+
+  React.useEffect(async () => {
+    const uid = await AsyncStorage.getItem("userId")
+    Promise.all([
+      fetchUserLists(uid).then(usersLists=>setLists(usersLists)),
+      fetchGroups(uid).then(groups=>setGroups(groups))
+    ]).then(_=>setloading(false)) 
+  }, [])
+
+  var listsElements = (<Text>You have no lists</Text>)
   if(!loading){
-    listsElements = lists.map(list=>(
-      <Button title={list.name} key={list.key} onPress={()=>navigation.navigate("List", {items:list.items})}/>
-    ))
+    if(lists.length > 0){
+      listsElements = lists.map(list=>(
+        <Button title={list.name} key={list.key} onPress={()=>navigation.navigate("List", {items:list.items})}/>
+      ))
+    }
   }
   return (
     <View >
-{loading?<Text>Loading...</Text>:
+      {loading?<Text>Loading...</Text>:
       <ScrollView>
-        <Text>My Lists</Text>
         {listsElements}
       </ScrollView>}
+      <Button title="Create list" onPress={()=>setCreateListModalOpen(!createListModalOpen)}/>
+      {createListModalOpen && <CreateListModal closeModal={()=>setCreateListModalOpen(false)} groups={groups}/>}
     </View>
   )
 }

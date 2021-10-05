@@ -13,7 +13,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Home from './Routes/Home.js';
 import ListScreen from './Routes/List/ListScreen';
 import Landing from './Routes/Landing'
-import LoadingAccount from './Routes/LoadingAccount'
+import LoadAccount from './Routes/LoadAccount'
 import React, { useState, useEffect } from "react"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './Routes/Login.js';
@@ -50,9 +50,9 @@ const App = () => {
       <ActivityIndicator size="large"/>
     </View>: 
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={loginState == "LOGGED IN" ? "LoadingAccount" : "Login"}>
+      <Stack.Navigator initialRouteName={loginState == "LOGGED IN" ? "LoadAccount" : "Login"}>
       {!["LOGGED IN",null].includes(loginState) && <Stack.Screen name="Login" component={Login}/>}
-        <Stack.Screen name="LoadingAccount" component={LoadingAccount} options={{headerShown:false}}/>
+        <Stack.Screen name="LoadAccount" component={LoadAccount} options={{headerShown:false}}/>
         <Stack.Screen name="Landing" component={Landing} options={{headerShown:false}}/>
         <Stack.Screen name="Home" component={Home}/>
         <Stack.Screen name="List" component={ListScreen}/>

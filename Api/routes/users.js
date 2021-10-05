@@ -12,7 +12,13 @@ exports.plugin = {
           method: 'GET',
           path: '/users',
           handler: async function (request, h) {
-            return await prisma.user.findMany({})
+            try{
+              return await prisma.user.findMany({})
+
+            }catch(e){
+              console.error(e)
+              return e
+            }
           }
       });
 
@@ -21,6 +27,7 @@ exports.plugin = {
           method: 'GET',
           path: '/users/{field}/{id}',
           handler: async function (request, h) {
+            console.log(request.params)
             return await prisma.user.findMany({where:{[request.params.field]:request.params.id}})
           }
       });
@@ -41,9 +48,31 @@ exports.plugin = {
             console.error(e)
           }
           return res
-          
         }
       });
+
+      //Create User
+      server.route({
+        method:"POST",
+        path:"/users/{userid}/update",
+        handler: async function (request, h) {
+          const payload = request.payload;
+          var res
+          try{
+            res = await prisma.user.update({
+              where:{
+                id:request.params.userid
+              },
+              data:{
+              ...payload
+            }})
+          }
+          catch(e){
+            console.error(e)
+          }
+          return res
+          }
+        });
 
   }
 };

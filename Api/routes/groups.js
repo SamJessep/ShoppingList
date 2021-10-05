@@ -7,7 +7,7 @@ exports.plugin = {
   version: '1.0.0',
   register: async function (server, options) {
 
-    //Get all users
+    //Get all groups for one user
       server.route({
           method: 'GET',
           path: '/groups/{userid}',
