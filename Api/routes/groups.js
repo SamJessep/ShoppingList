@@ -10,7 +10,7 @@ exports.plugin = {
     //Get all groups for one user
       server.route({
           method: 'GET',
-          path: '/groups/{userid}',
+          path: '/groups/user/id/{userid}',
           handler: async function (request, h) {
             return await prisma.group.findMany({where:{
               members:{

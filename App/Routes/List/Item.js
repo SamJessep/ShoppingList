@@ -2,7 +2,8 @@ import React from "react"
 import { Pressable , Text, View, StyleSheet } from "react-native"
 import {CHECK_MODE, EDIT_MODE} from "./Modes"
 
-const Item = ({data,RemoveItem,mode})=>{
+const Item = ({data,RemoveItem,mode,setMode, setSelected, selected})=>{
+  console.log(selected)
   const [checked, setChecked] = React.useState(data.checked)
 
   const CheckItem = ()=>{
@@ -10,13 +11,26 @@ const Item = ({data,RemoveItem,mode})=>{
       setChecked(!checked)
     }
   }
+
+  const LongPress = ()=>{
+    setMode(EDIT_MODE)
+    setSelected(data,true)
+  }
+
+  const ShortPress = ()=>{
+    if(mode == EDIT_MODE){
+      setSelected(data,!selected)
+    }else{
+      CheckItem()
+    }
+  }
   
   return (
     <View>
-      <Pressable onPress={CheckItem} style={styles.container}>
+      <Pressable onPress={ShortPress} style={[styles.container, selected&&styles.selected, (checked&&!selected)&&styles.checkedBackground]} onLongPress={LongPress}>
         <Text style={[styles.name, styles.flexItem, checked ? styles.checked : styles.notChecked]}>{data.name}</Text>
-        {mode == EDIT_MODE &&         
-        <Pressable style={[styles.button, styles.flexItem]} onPress={()=>RemoveItem(data)}>
+        {(mode == EDIT_MODE && selected) &&         
+        <Pressable style={[styles.button, styles.flexItem]}>
           <Text style={styles.buttonText}>X</Text>
         </Pressable>
         }
@@ -59,6 +73,12 @@ const styles = StyleSheet.create({
   },
   notChecked:{
     textDecorationLine:"none"
+  },
+  selected:{
+    backgroundColor:"red"
+  },
+  checkedBackground:{
+    backgroundColor:"#06a30659"
   }
 })
 

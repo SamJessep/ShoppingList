@@ -1,24 +1,41 @@
 import React from "react";
-import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet } from "react-native";
+import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet,ToastAndroid } from "react-native";
 import config from "react-native-config";
 import {Picker} from '@react-native-picker/picker';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingOverlay from "../Components/LoadingOverlay";
 
-const createGroup = async (name, userid)=>{
-  fetch(config.API_URL+"group/create/", {
-    method:"POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body:JSON.stringify({
-      name:name,
-      creatorid:userid
-    })
-  })
+const createGroup = async (name,setloading,closeModal)=>{
+  try{
+
+    setloading(true)
+    const userid = await AsyncStorage.getItem("userId")
+    const group = await fetch(config.API_URL+"groups/create", {
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        name:name,
+        creatorid:userid
+      })
+    }).then(res=>res.json())
+    console.log("created group name: %s ", group.name)
+    ToastAndroid.show("created group: "+group.name, ToastAndroid.SHORT)
+    setloading(false)
+  
+    const newGroups = await fetch(config.API_URL+"groups/user/id/"+userid).then(res=>res.json())
+  
+    console.dir(newGroups)
+    closeModal(newGroups,group)
+  }catch(e){
+    console.error(e)
+  }
 }
 
-const CreateGroupModal = ({closeModal, userid})=>{
+const CreateGroupModal = ({closeModal})=>{
   const [name, setName] = React.useState("")
-  const [buttonText, setButtonText] = React.useState("Create")
+  const [loading, setloading] = React.useState(false)
 
   return (
     <Modal animationType="fade" transparent={false}>
@@ -29,7 +46,8 @@ const CreateGroupModal = ({closeModal, userid})=>{
         <Text style={styles.title}>Create a group</Text>
         <Text>Name</Text>
         <TextInput style={styles.textField} onChangeText={setName}/>
-        <Button title={buttonText} disabled={buttonText!="Create"} onPress={()=>createGroup(name,userid)}/>
+        {loading ? <Button title="Please wait" disabled={true}/> :
+        <Button title="Create" onPress={()=>{console.log("Button Clicked"); createGroup(name,setloading,closeModal)}}/>}
       </View>
     </Modal>
   )

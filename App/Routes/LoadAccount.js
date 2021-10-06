@@ -8,8 +8,7 @@ import config from "react-native-config";
 
 const LoadAccount = ({navigation})=>{
   const [stateText, setStateText] = React.useState("loading")
-  React.useEffect(() => {
-    
+  React.useEffect(async () => {
     AsyncStorage.getItem("accessToken").then(async accessToken=>{
       const userId = await AsyncStorage.getItem("userId")
       const profile = await auth0.auth.userInfo({token:accessToken})

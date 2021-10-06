@@ -11,19 +11,19 @@ import {
 } from 'react-native';
 import * as React from 'react';
 
-const AddItem = ({onAddItem:saveItem})=>{
+const AddItem = ({onAddItem:saveItem, list})=>{
   
   const [text, setText] = React.useState("")
   const sendItem = ()=>{
     const item = {
-      name:text
+      name:text,
+      checked:false
     }
-    saveItem(item)
+    saveItem(item,list.id)
     setText("")
   }
   return (
     <View>
-      <Text style={styles.title}>Shopping List</Text>
       <TextInput 
         returnKeyType="send"
         onSubmitEditing={sendItem}
@@ -41,12 +41,6 @@ const styles = StyleSheet.create({
   input:{
     borderWidth:1,
     margin:10
-  },
-
-  title:{
-    fontSize:20,
-    textAlign:"center",
-    padding:5
   }
 })
 

@@ -50,7 +50,7 @@ exports.plugin = {
           method: 'GET',
           path: '/lists/id/{id}',
           handler: async function (request, h) {
-            return await prisma.list.findMany({
+            return await prisma.list.findFirst({
               where:{
                 id:request.params.id
               },
@@ -76,17 +76,22 @@ exports.plugin = {
         method: 'POST',
           path: '/lists/create/{groupid}',
           handler: async function (request, h) {
+            var includes = {}
+            request.query.include.split(",").forEach(key=>includes[key]=true)
             const payload = request.payload;
             var res
             try{
-              res = await prisma.list.create({data:{
-                ...payload,
-                group:{
-                  connect:{
-                    id:request.params.groupid
+              res = await prisma.list.create({
+                data:{
+                  ...payload,
+                  group:{
+                    connect:{
+                      id:request.params.groupid
+                    }
                   }
-                }
-              }})
+                },
+                include:includes
+              })
             }
             catch(e){
               console.error(e)

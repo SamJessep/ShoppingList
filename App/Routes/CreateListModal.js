@@ -1,28 +1,46 @@
 import React from "react";
-import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet } from "react-native";
+import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet, ToastAndroid } from "react-native";
 import config from "react-native-config";
 import {Picker} from '@react-native-picker/picker';
 import CreateGroupModal from "./CreateGroupModal";
 
-const createList = async (groupid,name)=>{
-  fetch(config.API_URL+"lists/create/"+groupid, {
-    method:"POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body:JSON.stringify({
-      name:name
-    })
-  })
+const createList = async (groupid,name, setLoading, createdGroup)=>{
+  console.log("GROUP ID:",groupid)
+  setLoading(true)
+  try{
+    const list = await fetch(config.API_URL+"lists/create/"+groupid+"?include=items", {
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        name:name
+      })
+    }).then(r=>r.json())
+    console.log(list)
+    createdGroup(list)
+  }
+  catch(e){
+    console.error(e)
+    ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
+  }
+  setLoading(false)
 }
 
-const CreateListModal = ({closeModal, groups})=>{
+const CreateListModal = ({closeModal, groups, createdGroup})=>{
   const [name, setName] = React.useState("")
-  const [buttonText, setButtonText] = React.useState("Create")
-  const [selectedGroup, setSelectedGroup] = React.useState(null)
+  const [loading, setLoading] = React.useState(false)
+  const [selectedGroup, setSelectedGroup] = React.useState(groups[0].id??null)
   const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false)
+  const [usersGroups, setUsersGroups] = React.useState(groups)
 
-  const refreshGroups = async ()=>{
+
+  const closeGroupModal = async (newGroups=false, createdGroup)=>{
+    if(newGroups){
+      setUsersGroups(newGroups)
+      setSelectedGroup(createdGroup.id)
+    }
+    setShowCreateGroupModal(false)
   }
   return (
     <Modal animationType="fade" transparent={false}>
@@ -34,18 +52,22 @@ const CreateListModal = ({closeModal, groups})=>{
         <Text>Name</Text>
         <TextInput style={styles.textField} onChangeText={setName}/>
 
-        <Button title="Create new group" onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}/>
-        {showCreateGroupModal && <CreateGroupModal closeModal={()=>setShowCreateGroupModal(false)}/>}
-        {groups.length == 0 && <Text>You have no groups</Text>}
-        <Picker 
+        <Text>Group</Text>
+        {usersGroups.length == 0 ? <Text>You have no groups</Text> :
+        <Picker style={styles.textField} 
           selectedValue={selectedGroup}
-          onValueChange={group =>setSelectedGroup(group)}>
-        {groups.map(group=>(
-          <Picker.Item label={group.name} value={group.id}/>
+          onValueChange={group =>setSelectedGroup(group)}
+        >
+        {usersGroups.map(group=>(
+          <Picker.Item label={group.name} value={group.id} key={group.id}/>
         ))}
-        </Picker>
+        </Picker>}
+        <Button title="Create new group" onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}/>
+        {showCreateGroupModal && <CreateGroupModal closeModal={closeGroupModal}/>}
+        
 
-        <Button title={buttonText} disabled={buttonText!="Create"} onPress={()=>createList(groupid,name)}/>
+        {loading ? <Button title="Please Wait" disabled={true}/> :
+        <Button title="Create" onPress={()=>createList(selectedGroup,name,setLoading,createdGroup)}/>}
       </View>
     </Modal>
   )

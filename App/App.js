@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './Routes/Home.js';
-import ListScreen from './Routes/List/ListScreen';
+import List from './Routes/List/List';
 import Landing from './Routes/Landing'
 import LoadAccount from './Routes/LoadAccount'
 import React, { useState, useEffect } from "react"
@@ -25,7 +25,7 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [loginState, setLoginState] = useState(null)
+  const [loginState, setLoginState] = useState()
   useEffect(() => {
     if(loginState==null){
       AsyncStorage.getItem("refreshToken").then(refreshToken=>{
@@ -36,7 +36,7 @@ const App = () => {
           console.log("Logged in")
           setLoginState("LOGGED IN")
         })
-        .catch(error=>{
+        .catch(async error=>{
           console.error("not Logged in")
           setLoginState("NOT LOGGED IN")
         });
@@ -55,7 +55,7 @@ const App = () => {
         <Stack.Screen name="LoadAccount" component={LoadAccount} options={{headerShown:false}}/>
         <Stack.Screen name="Landing" component={Landing} options={{headerShown:false}}/>
         <Stack.Screen name="Home" component={Home}/>
-        <Stack.Screen name="List" component={ListScreen}/>
+        <Stack.Screen name="List" component={List}/>
       </Stack.Navigator>
     </NavigationContainer>
     }

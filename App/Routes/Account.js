@@ -13,9 +13,10 @@ const Account = ({navigation})=>{
     auth0.webAuth
     .clearSession({})
     .then(async (success) => {
-        await AsyncStorage.removeItem("credentials");
+        await AsyncStorage.clear()
+        await AsyncStorage.setItem("loggedOut", true)
         console.log("Logged Out", success)
-        navigation.navigate("Login")
+        navigation.popToTop()
     })
     .catch(error => {
         console.log(error);
