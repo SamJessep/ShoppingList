@@ -17,7 +17,6 @@ const Login = ({navigation,setLoggedIn})=>{
         // Successfully authenticated
         // Store the accessToken
         const jwt = jwt_decode(credentials.idToken)
-        console.log({id:jwt.sub, at:credentials.accessToken, rt:credentials.refreshToken})
         Promise.all([
           AsyncStorage.setItem("accessToken", credentials.accessToken),
           AsyncStorage.setItem("refreshToken", credentials.refreshToken),

@@ -32,6 +32,7 @@ const MigrateProfile = async (userid) =>{
         authId:userid
       })
     })
+    return account
 }
 
 const CheckAccount = async (profile,userid,setStateText)=>{
@@ -39,11 +40,11 @@ const CheckAccount = async (profile,userid,setStateText)=>{
   const users = await fetch(url).then(res=>res.json())
   if(users.length == 0){
     setStateText("creating profile...")
-    CreateProfile()
+    await CreateProfile(profile,userid)
   }else{
     if(users[0].authId != userid){
       setStateText("migrating profile...")
-      MigrateProfile(profile, userid)
+      await MigrateProfile(profile, userid)
     }
   }
 }

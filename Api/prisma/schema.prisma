@@ -18,6 +18,7 @@ model User {
   email       String @unique
   phoneNumber String?
   groups      String[]
+  createdAt DateTime @default(now())
 }
 
 model Group {
@@ -25,6 +26,7 @@ model Group {
   name    String
   members String[]
   lists   List[]
+  createdAt DateTime @default(now())
 }
 
 model List {
@@ -33,6 +35,7 @@ model List {
   items   Item[]
   group   Group @relation(fields: [groupID], references: [id])
   groupID String    @db.ObjectId
+  createdAt DateTime @default(now())
 }
 
 model Item {
@@ -41,4 +44,5 @@ model Item {
   checked Boolean
   list    List    @relation(fields: [listID], references: [id])
   listID  String  @db.ObjectId
+  createdAt DateTime @default(now())
 }

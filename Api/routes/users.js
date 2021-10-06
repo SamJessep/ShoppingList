@@ -27,7 +27,12 @@ exports.plugin = {
           method: 'GET',
           path: '/users/{field}/{id}',
           handler: async function (request, h) {
-            return await prisma.user.findMany({where:{[request.params.field]:request.params.id}})
+            try{
+              return await prisma.user.findMany({where:{[request.params.field]:request.params.id}})
+            }catch(e){
+              console.error(e)
+              return e
+            }
           }
       });
 
@@ -42,6 +47,12 @@ exports.plugin = {
             res = await prisma.user.create({data:{
               ...payload
             }})
+            await prisma.group.create({
+              data:{
+                name:res.name+"'s group",
+                members:[res.id]
+              }
+            })
           }
           catch(e){
             console.error(e)

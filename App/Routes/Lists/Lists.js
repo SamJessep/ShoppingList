@@ -2,17 +2,18 @@ import {View, Text, ScrollView, Button} from "react-native"
 import React from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "react-native-config";
-import CreateListModal from "./CreateListModal.js";
+import CreateListModal from "../List/CreateListModal.js";
 import ActionButton from 'react-native-action-button';
+import ListCard from "./ListCard.js";
 
 const fetchUserLists = async uid=>{
-  const lists = await fetch(config.API_URL+"lists/user/"+uid).then(res=>res.json())
+  const lists = await fetch(config.API_URL+"lists/user/"+uid+"?include=group").then(res=>res.json())
   return lists
 }
 
 
 const fetchGroups = async uid=>{
-  const groups = await fetch(config.API_URL+"groups/user/id/"+uid).then(res=>res.json())
+  const groups = await fetch(config.API_URL+"groups/user/"+uid).then(res=>res.json())
   return groups
 }
 
@@ -29,7 +30,7 @@ const Lists = ({navigation})=>{
     const uid = await AsyncStorage.getItem("userId")
     Promise.all([
       fetchUserLists(uid).then(usersLists=>setLists(usersLists)),
-      fetchGroups(uid).then(groups=>setGroups(groups))
+      fetchGroups(uid).then(groups=>{setGroups(groups)})
     ]).then(_=>setloading(false)) 
   }, [])
 
@@ -37,7 +38,7 @@ const Lists = ({navigation})=>{
   if(!loading){
     if(lists.length > 0){
       listsElements = lists.map(list=>(
-        <Button title={list.name} key={list.id} onPress={()=>loadList(list)}/>
+        <ListCard key={list.id} data={list} loadList={loadList}/>
       ))
     }
   }

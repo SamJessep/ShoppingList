@@ -4,9 +4,12 @@ import config from "react-native-config";
 import {Picker} from '@react-native-picker/picker';
 import CreateGroupModal from "./CreateGroupModal";
 import { useBackHandler } from '@react-native-community/hooks'
+import Icon from "react-native-dynamic-vector-icons";
+import globalStyles from '../../styles'
 
-const createList = async (groupid,name, setLoading, createdGroup)=>{
-
+const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvalid)=>{
+  if(name == "")
+  return setNameIsInvalid(true)
   setLoading(true)
   try{
     const list = await fetch(config.API_URL+"lists/create/"+groupid+"?include=items", {
@@ -30,9 +33,10 @@ const createList = async (groupid,name, setLoading, createdGroup)=>{
 const CreateListModal = ({closeModal, groups, createdGroup})=>{
   const [name, setName] = React.useState("")
   const [loading, setLoading] = React.useState(false)
-  const [selectedGroup, setSelectedGroup] = React.useState(groups[0].id??null)
+  const [selectedGroup, setSelectedGroup] = React.useState(groups[0] ? groups[0].id:null)
   const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false)
   const [usersGroups, setUsersGroups] = React.useState(groups)
+  const [nameIsInvalid, setNameIsInvalid] = React.useState(false)
   useBackHandler(()=>closeModal())
 
 
@@ -46,12 +50,12 @@ const CreateListModal = ({closeModal, groups, createdGroup})=>{
   return (
     <Modal animationType="fade" transparent={false} >
       <Pressable style={styles.closeButton} onPress={closeModal}>
-        <Text style={styles.closeButtonText}>X</Text>
+        <Icon type="MaterialCommunityIcons" name="window-close"/>
       </Pressable>
       <View style={styles.container}>
         <Text style={styles.title}>Create a list</Text>
         <Text>Name</Text>
-        <TextInput style={styles.textField} onChangeText={setName}/>
+        <TextInput style={[globalStyles.textField, nameIsInvalid&&(globalStyles.textFieldInvalid)]} onChangeText={name=>{setNameIsInvalid(false); setName(name)}}/>
 
         <Text>Group</Text>
         {usersGroups.length == 0 ? <Text>You have no groups</Text> :
@@ -63,12 +67,14 @@ const CreateListModal = ({closeModal, groups, createdGroup})=>{
           <Picker.Item label={group.name} value={group.id} key={group.id}/>
         ))}
         </Picker>}
-        <Button title="Create new group" onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}/>
+        <Pressable onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}>
+          <Text style={{color:"blue", marginBottom:20}}>Create new group</Text>
+        </Pressable>
         {showCreateGroupModal && <CreateGroupModal closeModal={closeGroupModal}/>}
         
 
         {loading ? <Button title="Please Wait" disabled={true}/> :
-        <Button title="Create" onPress={()=>createList(selectedGroup,name,setLoading,createdGroup)}/>}
+        <Button title="Create" onPress={()=>createList(selectedGroup,name,setLoading,createdGroup,setNameIsInvalid)}/>}
       </View>
     </Modal>
   )
@@ -79,11 +85,6 @@ const styles = StyleSheet.create({
     flex:1,
     padding:20,
     justifyContent:"center"
-  },
-  textField:{
-    backgroundColor:"#dfdfdf",
-    borderRadius:10,
-    marginBottom:20
   },
   closeButton:{
     position:"absolute",

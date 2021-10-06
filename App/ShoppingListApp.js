@@ -1,12 +1,11 @@
 import { ActivityIndicator, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from './Routes/Home.js';
 import List from './Routes/List/List';
 import Landing from './Routes/Landing'
-import LoadAccount from './Routes/LoadAccount'
+import LoadAccount from './Routes/Auth/LoadAccount'
 import React, { useState, useEffect } from "react"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './Routes/Login.js';
+import Login from './Routes/Auth/Login.js';
 import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { connect } from 'react-redux';
@@ -40,7 +39,6 @@ const ShoppingListApp = (props) => {
           <>
           {props.needsSetup && <Stack.Screen name="LoadAccount" component={LoadAccount} options={{headerShown:false}}/>}
             <Stack.Screen name="Landing" component={Landing} options={{headerShown:false}}/>
-            <Stack.Screen name="Home" component={Home}/>
             <Stack.Screen name="List" component={List}/>
           </>  
           }

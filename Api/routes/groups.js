@@ -20,6 +20,26 @@ exports.plugin = {
           }
       });
 
+        //Get all groups for one user
+        server.route({
+          method: 'GET',
+          path: '/groups/user/{userid}',
+          handler: async function (request, h) {
+            const user = await prisma.user.findFirst({
+              where:{
+                authId:request.params.userid
+              }
+            })
+            return await prisma.group.findMany({where:{
+              members:{
+                has:user.id
+              }
+            }})
+          }
+        });
+
+      
+
       //Create a group
       server.route({
         method:"POST",
@@ -27,11 +47,16 @@ exports.plugin = {
         handler: async (request, h)=>{
           const payload = request.payload;
           var res
-          try {            
+          try {
+            const user = await prisma.user.findFirst({
+              where:{
+                authId:payload.creatorid
+              }
+            })   
             res = await prisma.group.create({
               data:{
                 name:payload.name,
-                members:[payload.creatorid]
+                members:[user.id]
               }
             })
           } catch (error) {

@@ -12,16 +12,24 @@ exports.plugin = {
           method: 'GET',
           path: '/lists/user/{userid}',
           handler: async function (request, h) {
+            var includes = {}
+            request.query.include.split(",").forEach(key=>includes[key]=true)
+            const user = await prisma.user.findFirst({
+              where:{
+                authId:request.params.userid
+              }
+            })
             return await prisma.list.findMany({
               where:{
                 group:{
                   members:{
-                    has:request.params.userid
+                    has:user.id
                   }
                 }
               },
               include:{
-                items:true
+                items:true,
+                ...includes
               }
             })
           }
