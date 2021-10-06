@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/client": "^3.1.1",
     "@react-native-async-storage/async-storage": "^1.15.8",
+    "@react-native-community/hooks": "^2.6.0",
     "@react-native-picker/picker": "^2.1.0",
     "@react-navigation/bottom-tabs": "^6.0.7",
     "@react-navigation/native": "^6.0.2",
@@ -31,6 +32,8 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.7.2",
     "react-native-uuid": "^2.0.1",
+    "react-redux": "^7.2.5",
+    "redux": "^4.1.1",
     "uniqid": "^5.4.0"
   },
   "devDependencies": {

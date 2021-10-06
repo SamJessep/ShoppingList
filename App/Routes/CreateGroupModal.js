@@ -1,11 +1,12 @@
 import React from "react";
-import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet,ToastAndroid } from "react-native";
+import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet,ToastAndroid,BackHandler } from "react-native";
 import config from "react-native-config";
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingOverlay from "../Components/LoadingOverlay";
+import { useBackHandler } from '@react-native-community/hooks'
 
-const createGroup = async (name,setloading,closeModal)=>{
+const createGroup = async (name,setloading)=>{
   try{
 
     setloading(true)
@@ -20,7 +21,6 @@ const createGroup = async (name,setloading,closeModal)=>{
         creatorid:userid
       })
     }).then(res=>res.json())
-    console.log("created group name: %s ", group.name)
     ToastAndroid.show("created group: "+group.name, ToastAndroid.SHORT)
     setloading(false)
   
@@ -36,6 +36,9 @@ const createGroup = async (name,setloading,closeModal)=>{
 const CreateGroupModal = ({closeModal})=>{
   const [name, setName] = React.useState("")
   const [loading, setloading] = React.useState(false)
+  useBackHandler(()=>closeModal())
+
+
 
   return (
     <Modal animationType="fade" transparent={false}>

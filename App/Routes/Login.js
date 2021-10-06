@@ -3,12 +3,12 @@ import { ActivityIndicator, Button, Text, View } from 'react-native';
 import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
+import { connect } from 'react-redux';
 
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
-const Login = ({navigation})=>{
+const Login = ({navigation,setLoggedIn})=>{
   const [accessToken, setAccessToken] = React.useState("")
   const [errorMessage, setErrorMessage] = React.useState("")
-  const [isLoggedIn, setIsLoggedIn] = React.useState(null)
     const startLogin = ()=>{
       auth0
       .webAuth
@@ -23,7 +23,7 @@ const Login = ({navigation})=>{
           AsyncStorage.setItem("refreshToken", credentials.refreshToken),
           AsyncStorage.setItem("userId", jwt.sub)
         ]).then(()=>{
-          setIsLoggedIn(true)
+          setLoggedIn()
           navigation.navigate("LoadAccount")
         })
       })
@@ -41,4 +41,16 @@ const Login = ({navigation})=>{
   )
 }
 
-export default Login
+function mapStateToProps(state){
+  return {
+    loggedIn:state.loggedIn
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    setLoggedIn: ()=>dispatch({type:"LOGGED_IN"})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

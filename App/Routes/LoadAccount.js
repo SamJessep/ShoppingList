@@ -5,55 +5,62 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
 
 import config from "react-native-config";
+import { connect } from "react-redux";
+const CreateProfile = async(profile, userid) =>{
+  url = config.API_URL+"users/create"
+  await fetch(url,{
+    method:"POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify({
+      name:profile.name,
+      email:profile.email,
+      authId:userid
+    })
+  })
+}
 
-const LoadAccount = ({navigation})=>{
+const MigrateProfile = async (userid) =>{
+    url = config.API_URL+"users/"+userid+"/update"
+    await fetch(url, {
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        authId:userid
+      })
+    })
+}
+
+const CheckAccount = async (profile,userid,setStateText)=>{
+  var url = config.API_URL+"users/email/"+profile.email
+  const users = await fetch(url).then(res=>res.json())
+  if(users.length == 0){
+    setStateText("creating profile...")
+    CreateProfile()
+  }else{
+    if(users[0].authId != userid){
+      setStateText("migrating profile...")
+      MigrateProfile(profile, userid)
+    }
+  }
+}
+
+
+const LoadAccount = ({navigation,setSetupComplete})=>{
   const [stateText, setStateText] = React.useState("loading")
   React.useEffect(async () => {
     AsyncStorage.getItem("accessToken").then(async accessToken=>{
-      const userId = await AsyncStorage.getItem("userId")
+      setStateText("Validating login...")
+      const userid = await AsyncStorage.getItem("userId")
+      setStateText("checking profile...")
       const profile = await auth0.auth.userInfo({token:accessToken})
       await AsyncStorage.setItem("profile",JSON.stringify(profile))
-      console.log(profile)
-      setStateText("checking profile...")
-      try{
-        var url = config.API_URL+"users/email/"+profile.email
-        const users = await fetch(url).then(res=>res.json())
-        if(users.length == 0){
-          setStateText("creating profile...")
-          url = config.API_URL+"users/create"
-          await fetch(url,{
-            method:"POST",
-            headers: {
-              'Content-Type': 'application/json'
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body:JSON.stringify({
-              name:profile.name,
-              email:profile.email,
-              authId:userId
-            })
-          })
-        }else{
-          if(users[0].authId != userId){
-            setStateText("migrating profile...")
-            url = config.API_URL+"users/"+userId+"/update"
-            await fetch(url, {
-              method:"POST",
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body:JSON.stringify({
-                authId:userId
-              })
-            })
-          }
-        }
-        setStateText("Done")
-        navigation.navigate("Landing")
-        // setTimeout(()=>navigation.navigate("Landing"), 1500)
-      }catch(e){
-        console.error(e)
-      }
+      await CheckAccount(profile,userid, setStateText)
+      setSetupComplete()
+      navigation.navigate("Landing")
     })
   }, [])
   return (
@@ -66,4 +73,18 @@ const LoadAccount = ({navigation})=>{
   )
 }
 
-export default LoadAccount
+function mapStateToProps(state){
+  return {
+    loggedIn:state.loggedIn,
+    needsSetup:state.needsSetup
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    setSetupComplete: ()=>dispatch({type:"SETUP_COMPLETE"})
+  }
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(LoadAccount)

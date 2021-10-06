@@ -12,7 +12,6 @@ const fetchUserLists = async uid=>{
 
 
 const fetchGroups = async uid=>{
-  console.log()
   const groups = await fetch(config.API_URL+"groups/user/id/"+uid).then(res=>res.json())
   return groups
 }

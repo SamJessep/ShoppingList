@@ -27,7 +27,6 @@ exports.plugin = {
           method: 'GET',
           path: '/users/{field}/{id}',
           handler: async function (request, h) {
-            console.log(request.params)
             return await prisma.user.findMany({where:{[request.params.field]:request.params.id}})
           }
       });

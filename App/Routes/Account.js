@@ -2,9 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react"
 import { ActivityIndicator, Alert, Button, Image, StyleSheet, Text, View } from "react-native"
 import Auth0 from 'react-native-auth0';
+import { connect } from "react-redux";
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
 
-const Account = ({navigation})=>{
+const Account = ({navigation,setLoggedOut})=>{
   const [profile, setProfile] = React.useState(null)
   React.useEffect(() => AsyncStorage.getItem("profile").then(profileString=>setProfile(JSON.parse(profileString))), [])
 
@@ -14,12 +15,10 @@ const Account = ({navigation})=>{
     .clearSession({})
     .then(async (success) => {
         await AsyncStorage.clear()
-        await AsyncStorage.setItem("loggedOut", true)
-        console.log("Logged Out", success)
-        navigation.popToTop()
+        setLoggedOut()
     })
     .catch(error => {
-        console.log(error);
+        console.error(error);
     });
   }
   return(
@@ -50,4 +49,16 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Account
+function mapStateToProps(state){
+  return {
+    loggedIn:state.loggedIn
+  }
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    setLoggedOut: ()=>dispatch({type:"LOGGED_OUT"})
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Account)

@@ -3,7 +3,6 @@ import { Pressable , Text, View, StyleSheet } from "react-native"
 import {CHECK_MODE, EDIT_MODE} from "./Modes"
 
 const Item = ({data,RemoveItem,mode,setMode, setSelected, selected})=>{
-  console.log(selected)
   const [checked, setChecked] = React.useState(data.checked)
 
   const CheckItem = ()=>{

@@ -1,11 +1,12 @@
 import React from "react";
-import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet, ToastAndroid } from "react-native";
+import { Pressable,TextInput, View, Text, Modal, Button,StyleSheet, ToastAndroid,BackHandler } from "react-native";
 import config from "react-native-config";
 import {Picker} from '@react-native-picker/picker';
 import CreateGroupModal from "./CreateGroupModal";
+import { useBackHandler } from '@react-native-community/hooks'
 
 const createList = async (groupid,name, setLoading, createdGroup)=>{
-  console.log("GROUP ID:",groupid)
+
   setLoading(true)
   try{
     const list = await fetch(config.API_URL+"lists/create/"+groupid+"?include=items", {
@@ -17,7 +18,6 @@ const createList = async (groupid,name, setLoading, createdGroup)=>{
         name:name
       })
     }).then(r=>r.json())
-    console.log(list)
     createdGroup(list)
   }
   catch(e){
@@ -33,6 +33,7 @@ const CreateListModal = ({closeModal, groups, createdGroup})=>{
   const [selectedGroup, setSelectedGroup] = React.useState(groups[0].id??null)
   const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false)
   const [usersGroups, setUsersGroups] = React.useState(groups)
+  useBackHandler(()=>closeModal())
 
 
   const closeGroupModal = async (newGroups=false, createdGroup)=>{
@@ -43,7 +44,7 @@ const CreateListModal = ({closeModal, groups, createdGroup})=>{
     setShowCreateGroupModal(false)
   }
   return (
-    <Modal animationType="fade" transparent={false}>
+    <Modal animationType="fade" transparent={false} >
       <Pressable style={styles.closeButton} onPress={closeModal}>
         <Text style={styles.closeButtonText}>X</Text>
       </Pressable>

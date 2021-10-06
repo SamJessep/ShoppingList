@@ -35,7 +35,6 @@ const List = ({route})=>{
     }).then(r=>r.json()).catch(console.error)
     const newList = await fetch(config.API_URL+`lists/id/${listid}`).then(r=>r.json())
     setitems(newList.items)
-    console.log(newList.items)
   }
   
   const RemoveItem = async (item) =>{
@@ -83,7 +82,6 @@ const List = ({route})=>{
 
   const CountSelected = ()=>{
     const count = items.filter(i=>i.selected).length
-    console.log(count)
     return count
   }
   const deleteButtonText = `Delete ${selectedCount} item${selectedCount>1?"s":""}`
