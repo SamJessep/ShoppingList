@@ -30,11 +30,12 @@ exports.plugin = {
                 authId:request.params.userid
               }
             })
-            return await prisma.group.findMany({where:{
+            const groups = await prisma.group.findMany({where:{
               members:{
                 has:user.id
               }
-            }})
+            }}).catch(console.error)
+            return groups
           }
         });
 

@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
+const { v4:uuidv4 } = require('uuid');
 const prisma = new PrismaClient()
 
 
@@ -50,7 +51,8 @@ exports.plugin = {
             await prisma.group.create({
               data:{
                 name:res.name+"'s group",
-                members:[res.id]
+                members:[res.id],
+                key:uuidv4()
               }
             })
           }

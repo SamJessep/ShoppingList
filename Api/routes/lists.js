@@ -114,11 +114,11 @@ exports.plugin = {
           path: '/lists/id/{listid}/add',
           handler: async function (request, h) {
             const payload = request.payload;
+            payload.checked = JSON.parse(payload.checked)
             try{
               await prisma.item.create({
                 data:{
-                  name: payload.name,
-                  checked: JSON.parse(payload.checked),
+                  ...payload,
                   list:{
                     connect:{
                       id:request.params.listid
@@ -143,14 +143,14 @@ exports.plugin = {
           path: '/lists/id/{listid}/update/{itemid}',
           handler: async function (request, h) {
             const payload = request.payload;
+            payload.checked = JSON.parse(payload.checked)
             try{
               await prisma.item.update({
                 where:{
                   id:request.params.itemid
                 },
                 data:{
-                  name: payload.name,
-                  checked: JSON.parse(payload.checked),
+                  ...payload,
                   list:{
                     connect:{
                       id:request.params.listid

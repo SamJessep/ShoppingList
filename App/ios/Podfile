@@ -16,6 +16,8 @@ target 'ShoppingList' do
 
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 
+  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
+
   target 'ShoppingListTests' do
     inherit! :complete
     # Pods for testing
