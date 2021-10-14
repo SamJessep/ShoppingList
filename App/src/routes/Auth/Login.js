@@ -2,6 +2,7 @@ import React from 'react'
 import { ActivityIndicator, Button, Text, View } from 'react-native';
 import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNSecureKeyStore, {ACCESSIBLE} from "react-native-secure-key-store";
 import jwt_decode from "jwt-decode";
 import { connect } from 'react-redux';
 
@@ -18,8 +19,8 @@ const Login = ({navigation,setLoggedIn})=>{
         // Store the accessToken
         const jwt = jwt_decode(credentials.idToken)
         Promise.all([
-          AsyncStorage.setItem("accessToken", credentials.accessToken),
-          AsyncStorage.setItem("refreshToken", credentials.refreshToken),
+          RNSecureKeyStore.set("accessToken", credentials.accessToken, {accessible:ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY}),          
+          RNSecureKeyStore.set("refreshToken", credentials.refreshToken, {accessible:ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY}),
           AsyncStorage.setItem("userId", jwt.sub)
         ]).then(()=>{
           setLoggedIn()
@@ -28,7 +29,7 @@ const Login = ({navigation,setLoggedIn})=>{
       })
       .catch(error => {
         setErrorMessage(error.toString())
-        console.log(error)
+        console.error(error)
       });
     }
   return(

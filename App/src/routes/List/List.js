@@ -18,6 +18,11 @@ const RemoveItemFromDB = async (item,listid) =>{
     return newList.items
 }
 
+const FetchItems = async (listid) =>{
+  const list = await fetch(config.API_URL+"/lists/id/"+uid).then(res=>res.json())
+  return list.items
+}
+
 const UpdateItemInDB = async (newItem, listid, itemid)=>{
   delete newItem["id"]
   delete newItem["listID"]
@@ -26,7 +31,6 @@ const UpdateItemInDB = async (newItem, listid, itemid)=>{
     headers:{'Content-Type': 'application/json'},
     body:JSON.stringify(newItem)
   }).then(res=>res.json())
-  console.log(dbItem)
   return dbItem
 }
 
@@ -39,7 +43,6 @@ const List = ({route})=>{
   
   const AddItemToItems = async (item,listid) =>{
     setitems([...items,item])
-    setUpdating(true)
     await fetch(config.API_URL+`lists/id/${listid}/add`, {
       method:"POST",
       headers: {
@@ -48,10 +51,7 @@ const List = ({route})=>{
       body:JSON.stringify(item)
     }).then(r=>r.json()).catch(console.error)
     const newList = await fetch(config.API_URL+`lists/id/${listid}`).then(r=>r.json())
-    if(JSON.stringify(newList.items) !== JSON.stringify(items)){
-      setitems(newList.items)
-    }
-    setUpdating(false)
+    Refresh(newList.items)
   }
   
 
@@ -60,21 +60,20 @@ const List = ({route})=>{
       const newItems = items.filter(i=>i.id !== item.id)
       setitems(newItems)
     }
-    setUpdating(true)
     const dbItems = await RemoveItemFromDB(item, list.id)
-    if(JSON.stringify(dbItems) !== JSON.stringify(items)){
-      setitems(dbItems)
+    if(localUpdate){
+      Refresh(dbItems)
     }
-    setUpdating(false)
   }
 
   const DeleteMany = async indexes =>{
     var itemsToDelete = items.filter((_,index)=>indexes.includes(index))
     const newItems = items.filter((_,index)=>!indexes.includes(index))
     setitems(newItems)
-    setSelectedCount(0)
-    setMode(CHECK_MODE)
-    itemsToDelete.forEach(item=>RemoveItem(item,false))
+    for(let item of itemsToDelete){
+      await RemoveItem(item,false)
+    }
+    await Refresh()
   }
 
   const ListItemClicked = async (item)=>{
@@ -89,6 +88,18 @@ const List = ({route})=>{
       setitems(newItems)
     }
   }
+
+  const Refresh = async(dbItems=false)=>{
+    setUpdating(true)
+    if(!dbItems){
+      dbItems = await FetchItems(list.id)
+    }
+    if(JSON.stringify(dbItems) !== JSON.stringify(items)){
+      setitems(dbItems)
+    }
+    setUpdating(false)
+  }
+
   const deleteButtonText = `Delete ${selectedCount} item${selectedCount>1?"s":""}`
   const listItems = items.map((item) =>{
     return {
@@ -103,8 +114,7 @@ const List = ({route})=>{
     <AddItem onAddItem={AddItemToItems} list={list}></AddItem>
     <View style={styles.divider}></View>
     <Text>Items</Text>
-    {updating && <Text style={{textAlign:"center"}}>Syncing...</Text>}
-    <HoldList noItemsComponent={<Text>No Items</Text>} onDeletePressed={DeleteMany}>
+    <HoldList noItemsComponent={<Text>No Items</Text>} onDeletePressed={DeleteMany} onRefresh={Refresh} refreshable refreshing={updating}>
       {listItems}
     </HoldList>
     {mode === EDIT_MODE &&

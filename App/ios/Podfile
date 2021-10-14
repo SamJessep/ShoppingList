@@ -18,6 +18,8 @@ target 'ShoppingList' do
 
   pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
+  pod 'RNSecureKeyStore', :path => '../node_modules/react-native-secure-key-store'
+
   target 'ShoppingListTests' do
     inherit! :complete
     # Pods for testing

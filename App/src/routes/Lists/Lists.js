@@ -9,6 +9,7 @@ import CreateGroupModal from "../List/CreateGroupModal.js";
 import HoldList from "../../components/HoldList/HoldList";
 import ActionButton from "./ActionButton.js";
 
+
 const fetchUserLists = async uid=>{
   const lists = await fetch(config.API_URL+"lists/user/"+uid+"?include=group").then(res=>res.json())
   return lists
@@ -42,13 +43,38 @@ const Lists = ({navigation})=>{
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
-      const uid = await AsyncStorage.getItem("userId")
-      setUpdating(true)
-      await fetchUserLists(uid).then(usersLists=>setLists(usersLists))
-      setUpdating(false)
+      await Refresh()
     });
     return unsubscribe;
   }, [navigation]);
+
+  const RemoveListFromDB = async (list,userid, syncLocal=false)=>{
+    const newLists = await fetch(config.API_URL+`lists/${userid}/${list.id}`, {method:"DELETE"})
+    if(syncLocal){
+      await Refresh()
+    }
+    return newLists
+  }
+
+  const DeleteLists = async indexes=>{
+    var listsToDelete = lists.filter((_,index)=>indexes.includes(index))
+    const newLists = lists.filter((_,index)=>!indexes.includes(index))
+    setLists(newLists)
+    for(let list of listsToDelete){
+      await RemoveListFromDB(list,uid)
+    }
+    await Refresh()
+  }
+
+  const Refresh = async ()=>{
+    setUpdating(true)
+    const uid = await AsyncStorage.getItem("userId")
+    const dbLists = await fetchUserLists(uid)
+    if(JSON.stringify(dbLists) !== JSON.stringify(lists)){
+      setLists(dbLists)
+    }
+    setUpdating(false)
+  }
   
   var listsElements
   if(!loading){
@@ -63,12 +89,9 @@ const Lists = ({navigation})=>{
   }
   return (
     <View style={{flex:1}}>
-      {updating && <Text>Updating...</Text>}
-      {loading?<Text>Loading...</Text>:
-      <HoldList onItemPress={console.log} noItemsComponent={<Text>No Lists</Text>}>
+      <HoldList noItemsComponent={<Text>No Lists</Text>} onDeletePressed={DeleteLists} onRefresh={Refresh} refreshable refreshing={updating||loading}>
         {listsElements}
       </HoldList>
-      }
       <ActionButton actions={{
         createList:setCreateListModalOpen,
         createGroup:setCreateGroupModalOpen

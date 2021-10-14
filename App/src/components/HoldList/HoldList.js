@@ -1,14 +1,15 @@
 import React from "react"
-import { ScrollView,View,Button,Text } from "react-native"
+import { ScrollView,View,Button,Text, RefreshControl } from "react-native"
 import HoldListItem from "./HoldListItem"
 import {CHECK_MODE, EDIT_MODE} from "../../routes/List/Modes"
 import {useStateWithDep} from '../../customHooks'
 
 
-const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed}) =>{
+const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, onRefresh,refreshable=false, refreshing=false}) =>{
   const [mode, setMode] = React.useState(CHECK_MODE)
   const [listItems, setListItems] = useStateWithDep(children)
   const [selectedCount, setSelectedCount] = React.useState(0)
+  // const [refreshing, setRefreshing] = React.useState(false)
 
 
   const DeleteSelected = async ()=>{
@@ -59,7 +60,8 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed}) 
   return (
     <View>
     <ScrollView>
-      {children.length == 0 ? noItemsComponent :
+      <RefreshControl onRefresh={onRefresh} enabled={refreshable} refreshing={refreshing}/>
+      {children.length > 0 ?
         listItems.map((child,key)=>(
         <HoldListItem 
           key={key}
@@ -71,8 +73,8 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed}) 
           setMode={(m)=>setMode(m)}
           data={child}>
             {child.component}
-        </HoldListItem>
-      ))}
+        </HoldListItem> 
+      )): refreshing ? <></> : noItemsComponent}
     </ScrollView>
     
     {mode == EDIT_MODE && <View>

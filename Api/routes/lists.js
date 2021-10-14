@@ -108,6 +108,40 @@ exports.plugin = {
           }
       });
 
+      //Delete List by id
+      server.route({
+        method: 'DELETE',
+          path: '/lists/{userid}/{listid}',
+          handler: async function (request, h) {
+            try{
+              await prisma.list.delete({
+                where:{
+                  id:request.params.listid
+                }
+              })
+              await prisma.item.deleteMany({
+                where:{
+                  listID:request.params.listid
+                }
+              })
+              return await prisma.list.findMany({
+                where:{
+                  group:{
+                    members:{
+                      has:request.params.userid
+                    }
+                  }
+                },
+                include:{
+                  items:true
+                }
+              })
+            }catch(e){
+              console.error(e)
+            }
+          }
+      });
+
       //Add List item
       server.route({
         method: 'POST',

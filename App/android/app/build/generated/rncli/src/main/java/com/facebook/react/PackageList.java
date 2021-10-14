@@ -27,6 +27,8 @@ import com.peel.react.rnos.RNOSModule;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-secure-key-store
+import com.reactlibrary.securekeystore.RNSecureKeyStorePackage;
 // react-native-vector-icons
 import com.oblador.vectoricons.VectorIconsPackage;
 
@@ -82,6 +84,7 @@ public class PackageList {
       new RNOSModule(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
+      new RNSecureKeyStorePackage(),
       new VectorIconsPackage()
     ));
   }

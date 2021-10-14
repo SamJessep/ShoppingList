@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react"
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './routes/Auth/Login.js';
 import Auth0 from 'react-native-auth0';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNSecureKeyStore, {ACCESSIBLE} from "react-native-secure-key-store";
 import { connect } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -17,11 +17,12 @@ const Stack = createNativeStackNavigator();
 const ShoppingListApp = (props) => {
   const [loading, setLoading] = useState(true)
   useEffect( async() => {
-    const refreshToken = await AsyncStorage.getItem("refreshToken")
+    const accessToken = await RNSecureKeyStore.get("accessToken").catch(e=>props.setLoggedOut())
     try{
-      await auth0.auth.refreshToken({refreshToken: refreshToken})
+      const profile = await auth0.auth.userInfo({token:accessToken})
       props.setLoggedIn()
     }catch(e){
+      console.error(e)
       props.setLoggedOut()
     }
     setLoading(false)

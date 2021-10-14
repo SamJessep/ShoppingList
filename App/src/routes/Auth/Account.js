@@ -8,8 +8,6 @@ const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzL
 const Account = ({navigation,setLoggedOut})=>{
   const [profile, setProfile] = React.useState(null)
   React.useEffect(() => AsyncStorage.getItem("profile").then(profileString=>setProfile(JSON.parse(profileString))), [])
-
-  AsyncStorage.getItem("userId").then(uid=>console.log("UID", uid))
   const LogOut = ()=>{
     auth0.webAuth
     .clearSession({})

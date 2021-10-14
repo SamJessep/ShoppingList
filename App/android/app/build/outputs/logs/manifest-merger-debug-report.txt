@@ -16,6 +16,7 @@ MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\nod
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-safe-area-context] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-screens] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-secure-key-store] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-secure-key-store\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-vector-icons] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.react:react-native:0.65.1] C:\Users\Sam\.gradle\caches\transforms-3\7cdf8de9c37004713d4017747f452054\transformed\jetified-react-native-0.65.1\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\Sam\.gradle\caches\transforms-3\13fd9b66b2f17faf01d7b58e404cc03f\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -188,6 +189,8 @@ MERGED from [:react-native-safe-area-context] C:\Users\Sam\source\repos\Shopping
 MERGED from [:react-native-safe-area-context] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-screens] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-screens] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-secure-key-store] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-secure-key-store\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-secure-key-store] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-secure-key-store\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-vector-icons] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-vector-icons] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.65.1] C:\Users\Sam\.gradle\caches\transforms-3\7cdf8de9c37004713d4017747f452054\transformed\jetified-react-native-0.65.1\AndroidManifest.xml:5:5-7:41

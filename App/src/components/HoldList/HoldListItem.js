@@ -5,13 +5,11 @@ import {CHECK_MODE, EDIT_MODE} from "../../routes/List/Modes"
 const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,selected,data}) =>{
 
   const LongPress = ()=>{
-    console.log("Long Press")
     setMode(EDIT_MODE)
     onItemSelect(index,true)
   }
 
   const ShortPress = ()=>{
-    console.log("Short Press")
     if(mode == EDIT_MODE){
       onItemSelect(index,!selected)
     }else{
@@ -19,7 +17,6 @@ const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,s
       data.onClick()
     }
   }
-  console.log(selected)
   return (
     <TouchableRipple onPress={ShortPress} onLongPress={LongPress} style={[selected&&styles.selected]}>
       <View style={styles.row}>
