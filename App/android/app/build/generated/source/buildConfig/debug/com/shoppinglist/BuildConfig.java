@@ -12,7 +12,7 @@ public final class BuildConfig {
   // Field from default config.
   public static final String API_URL = "http://192.168.1.80:3000/";
   // Field from default config.
-  public static final String API_URL_DEV = "http://192.168.1.80:3000/DEV";
+  public static final String API_URL_DEV = "http://192.168.1.80:3000/";
   // Field from default config.
-  public static final String API_URL_PROD = "http://192.168.1.80:3000/PROD";
+  public static final String API_URL_PROD = "https://shopping-list-rn.herokuapp.com/";
 }

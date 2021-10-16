@@ -1,1 +1,0 @@
-web: cd Api && echo 'DATABASE_URL="mongodb+srv://admin:paYOu2irPPJ6EwvL@shoppinglistcluster.cepno.mongodb.net/ShoppingList"' > .env && npm i && npm run start

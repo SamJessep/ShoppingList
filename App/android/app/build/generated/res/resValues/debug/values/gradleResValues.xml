@@ -10,8 +10,8 @@
     <!-- Value from default config. -->
     <string name="API_URL" translatable="false">"http://192.168.1.80:3000/"</string>
     <!-- Value from default config. -->
-    <string name="API_URL_DEV" translatable="false">"http://192.168.1.80:3000/DEV"</string>
+    <string name="API_URL_DEV" translatable="false">"http://192.168.1.80:3000/"</string>
     <!-- Value from default config. -->
-    <string name="API_URL_PROD" translatable="false">"http://192.168.1.80:3000/PROD"</string>
+    <string name="API_URL_PROD" translatable="false">"https://shopping-list-rn.herokuapp.com/"</string>
 
 </resources>
