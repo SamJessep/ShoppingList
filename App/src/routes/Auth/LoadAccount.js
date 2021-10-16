@@ -57,17 +57,16 @@ const LoadAccount = ({navigation,setSetupComplete,setLoggedOut})=>{
   }
   const CheckAccount = async (profile,userid)=>{
     var url = APP_CONFIG.API_URL+"users/email/"+profile.email
-    const users = await fetch(url).then(res=>res.text())
-    console.log(users)
-    // if(users.length == 0){
-    //   setStateText("creating profile...")
-    //   await CreateProfile(profile,userid)
-    // }else{
-    //   if(users[0].authId != userid){
-    //     setStateText("migrating profile...")
-    //     await MigrateProfile(profile, userid)
-    //   }
-    // }
+    const users = await fetch(url).then(res=>res.json())
+    if(users.length == 0){
+      setStateText("creating profile...")
+      await CreateProfile(profile,userid)
+    }else{
+      if(users[0].authId != userid){
+        setStateText("migrating profile...")
+        await MigrateProfile(profile, userid)
+      }
+    }
   }
 
   const FailedLoad = e =>{
