@@ -57,6 +57,7 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
     })
     return selectedIndexes
   }
+
   return (
     <View>
     <ScrollView>

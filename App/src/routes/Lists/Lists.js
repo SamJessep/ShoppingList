@@ -1,7 +1,6 @@
 import {View, Text, ScrollView, Button, StyleSheet} from "react-native"
 import React from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import config from "react-native-config";
 import CreateListModal from "../List/CreateListModal.js";
 import ListCard from "./ListCard.js";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,13 +10,13 @@ import ActionButton from "./ActionButton.js";
 
 
 const fetchUserLists = async uid=>{
-  const lists = await fetch(config.API_URL+"lists/user/"+uid+"?include=group").then(res=>res.json())
+  const lists = await fetch(APP_CONFIG.API_URL+"lists/user/"+uid+"?include=group").then(res=>res.json())
   return lists
 }
 
 
 const fetchGroups = async uid=>{
-  const groups = await fetch(config.API_URL+"groups/user/"+uid).then(res=>res.json())
+  const groups = await fetch(APP_CONFIG.API_URL+"groups/user/"+uid).then(res=>res.json())
   return groups
 }
 
@@ -49,7 +48,7 @@ const Lists = ({navigation})=>{
   }, [navigation]);
 
   const RemoveListFromDB = async (list,userid, syncLocal=false)=>{
-    const newLists = await fetch(config.API_URL+`lists/${userid}/${list.id}`, {method:"DELETE"})
+    const newLists = await fetch(APP_CONFIG.API_URL+`lists/${userid}/${list.id}`, {method:"DELETE"})
     if(syncLocal){
       await Refresh()
     }
