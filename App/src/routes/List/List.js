@@ -13,20 +13,20 @@ import HoldList from '../../components/HoldList/HoldList';
 import { CHECK_MODE, EDIT_MODE } from './Modes';
 
 const RemoveItemFromDB = async (item,listid) =>{
-    await fetch(config.API_URL+`lists/id/${listid}/delete/${item.id}`, {method:"DELETE"})
-    const newList = await fetch(config.API_URL+`lists/id/${listid}`).then(r=>r.json())
+    await fetch(APP_CONFIG.API_URL+`lists/id/${listid}/delete/${item.id}`, {method:"DELETE"})
+    const newList = await fetch(APP_CONFIG.API_URL+`lists/id/${listid}`).then(r=>r.json())
     return newList.items
 }
 
 const FetchItems = async (listid) =>{
-  const list = await fetch(config.API_URL+"/lists/id/"+uid).then(res=>res.json())
+  const list = await fetch(APP_CONFIG.API_URL+"/lists/id/"+uid).then(res=>res.json())
   return list.items
 }
 
 const UpdateItemInDB = async (newItem, listid, itemid)=>{
   delete newItem["id"]
   delete newItem["listID"]
-  const dbItem = await fetch(config.API_URL+`lists/id/${listid}/update/${itemid}`, {
+  const dbItem = await fetch(APP_CONFIG.API_URL+`lists/id/${listid}/update/${itemid}`, {
     method:"POST",
     headers:{'Content-Type': 'application/json'},
     body:JSON.stringify(newItem)
@@ -43,14 +43,14 @@ const List = ({route})=>{
   
   const AddItemToItems = async (item,listid) =>{
     setitems([...items,item])
-    await fetch(config.API_URL+`lists/id/${listid}/add`, {
+    await fetch(APP_CONFIG.API_URL+`lists/id/${listid}/add`, {
       method:"POST",
       headers: {
         'Content-Type': 'application/json'
       },
       body:JSON.stringify(item)
     }).then(r=>r.json()).catch(console.error)
-    const newList = await fetch(config.API_URL+`lists/id/${listid}`).then(r=>r.json())
+    const newList = await fetch(APP_CONFIG.API_URL+`lists/id/${listid}`).then(r=>r.json())
     Refresh(newList.items)
   }
   

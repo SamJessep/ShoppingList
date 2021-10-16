@@ -1,5 +1,6 @@
-com/facebook/react/PackageList.java
- com.facebook.react.PackageList
+com/shoppinglist/MainApplication.java
+ com.shoppinglist.MainApplication
+ com.shoppinglist.MainApplication$1
 com/shoppinglist/ReactNativeFlipper.java
  com.shoppinglist.ReactNativeFlipper
  com.shoppinglist.ReactNativeFlipper$1
@@ -9,6 +10,5 @@ com/shoppinglist/MainActivity.java
  com.shoppinglist.MainActivity
 com/shoppinglist/BuildConfig.java
  com.shoppinglist.BuildConfig
-com/shoppinglist/MainApplication.java
- com.shoppinglist.MainApplication
- com.shoppinglist.MainApplication$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList

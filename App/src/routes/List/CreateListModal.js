@@ -14,7 +14,7 @@ const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvali
   return setNameIsInvalid(true)
   setLoading(true)
   try{
-    const list = await fetch(config.API_URL+"lists/create/"+groupid+"?include=items", {
+    const list = await fetch(APP_CONFIG.API_URL+"lists/create/"+groupid+"?include=items", {
       method:"POST",
       headers: {
         'Content-Type': 'application/json'

@@ -22,8 +22,8 @@ const ShoppingListApp = (props) => {
       const profile = await auth0.auth.userInfo({token:accessToken})
       props.setLoggedIn()
     }catch(e){
-      console.error(e)
-      props.setLoggedOut()
+      console.log(props)
+      props.setNeedsSetup()
     }
     setLoading(false)
   }, [])
@@ -61,7 +61,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
     setLoggedIn: ()=>dispatch({type:"LOGGED_IN"}),
-    setLoggedOut: ()=>dispatch({type:"LOGGED_OUT"})
+    setLoggedOut: ()=>dispatch({type:"LOGGED_OUT"}),
+    setNeedsSetup: ()=>dispatch({type:"NEEDS_SETUP"})
   }
 }
 

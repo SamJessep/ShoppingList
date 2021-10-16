@@ -12,7 +12,7 @@ const createGroup = async (name,setloading, closeModal,setNameIsInvalid)=>{
   try{
     setloading(true)
     const userid = await AsyncStorage.getItem("userId")
-    const group = await fetch(config.API_URL+"groups/create", {
+    const group = await fetch(APP_CONFIG.API_URL+"groups/create", {
       method:"POST",
       headers: {
         'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ const createGroup = async (name,setloading, closeModal,setNameIsInvalid)=>{
     ToastAndroid.show("created group: "+group.name, ToastAndroid.SHORT)
     setloading(false)
   
-    const newGroups = await fetch(config.API_URL+"groups/user/"+userid).then(res=>res.json())
+    const newGroups = await fetch(APP_CONFIG.API_URL+"groups/user/"+userid).then(res=>res.json())
   
     console.dir(newGroups)
     closeModal(newGroups,group)
