@@ -57,11 +57,12 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
     })
     return selectedIndexes
   }
-
+console.log(refreshable)
   return (
     <View>
-    <ScrollView>
+    <ScrollView refreshControl={
       <RefreshControl onRefresh={onRefresh} enabled={refreshable} refreshing={refreshing}/>
+    }>
       {children.length > 0 ?
         listItems.map((child,key)=>(
         <HoldListItem 

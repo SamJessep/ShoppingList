@@ -1,10 +1,10 @@
 import React from "react"
-import { View,Text, TextInput, Button, Switch } from "react-native"
+import { View,Text, TextInput, Button, Switch, StyleSheet } from "react-native"
 import globalStyles from "../styles/styles"
 
 const Settings = ()=>{
   const [config, setConfig] = React.useState(APP_CONFIG)
-  const [useProductionAPI, setUseProductionAPI] = React.useState(false)
+  const [useProductionAPI, setUseProductionAPI] = React.useState(config.API_URL === APP_CONFIG.API_URL)
 
   if(useProductionAPI && config.API_URL != APP_CONFIG.API_URL_PROD){
     setConfig({...config, API_URL:APP_CONFIG.API_URL_PROD})
@@ -25,9 +25,11 @@ const Settings = ()=>{
 
   return(
     <View style={{flex:1, margin:10}}>
-      <Text>Server Address</Text>
-      <TextInput value={config.API_URL} style={globalStyles.textField} onChangeText={(t)=>setConfig({...config, API_URL:t})}></TextInput>
-      <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+      <View style={styles.control_row}>
+        <Text>Server Address:</Text>
+        <Text style={{fontWeight:"700"}}>{config.API_URL}</Text>
+      </View>
+      <View style={styles.control_row}>
         <Text>Use Production API</Text>
         <Switch value={useProductionAPI} onValueChange={setUseProductionAPI}/>
       </View>
@@ -36,6 +38,10 @@ const Settings = ()=>{
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  control_row:{flexDirection:"row", justifyContent:"space-between"}
+})
 
 
 export default Settings
