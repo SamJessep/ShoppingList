@@ -22,7 +22,6 @@ const ShoppingListApp = (props) => {
       const profile = await auth0.auth.userInfo({token:accessToken})
       props.setLoggedIn()
     }catch(e){
-      console.log(props)
       props.setNeedsSetup()
     }
     setLoading(false)

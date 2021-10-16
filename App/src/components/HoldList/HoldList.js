@@ -57,7 +57,6 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
     })
     return selectedIndexes
   }
-console.log(refreshable)
   return (
     <View>
     <ScrollView refreshControl={
