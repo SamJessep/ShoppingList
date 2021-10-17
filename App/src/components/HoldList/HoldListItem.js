@@ -1,8 +1,9 @@
 import React from "react"
 import { Pressable, StyleSheet, Switch, Text,View } from "react-native"
 import { Checkbox, TouchableRipple } from 'react-native-paper';
+import Dragable from "../../Dragable";
 import {CHECK_MODE, EDIT_MODE} from "../../routes/List/Modes"
-const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,selected,data}) =>{
+const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,selected,data,dragableOptions}) =>{
 
   const LongPress = ()=>{
     setMode(EDIT_MODE)
@@ -18,16 +19,18 @@ const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,s
     }
   }
   return (
-    <TouchableRipple onPress={ShortPress} onLongPress={LongPress} style={[selected&&styles.selected]}>
-      <View style={styles.row}>
-        <View style={styles.contentContainer}>
-          {children}
+    <Dragable {...dragableOptions} extra={{index:index}}>
+      <Pressable onPress={ShortPress} onLongPress={LongPress} style={[selected&&styles.selected]}>
+        <View style={styles.row}>
+          <View style={styles.contentContainer}>
+            {children}
+          </View>
+          <View style={styles.selectedContainer}>
+          {mode == EDIT_MODE && <Checkbox status={selected ? 'checked' : 'unchecked'}/>}
+          </View>
         </View>
-        <View style={styles.selectedContainer}>
-        {mode == EDIT_MODE && <Checkbox status={selected ? 'checked' : 'unchecked'}/>}
-        </View>
-      </View>
-    </TouchableRipple>
+      </Pressable>
+    </Dragable>
   )
 }
 

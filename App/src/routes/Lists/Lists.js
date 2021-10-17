@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CreateGroupModal from "../List/CreateGroupModal.js";
 import HoldList from "../../components/HoldList/HoldList";
 import ActionButton from "./ActionButton.js";
+import Dragable from "../../Dragable.js";
 
 
 const fetchUserLists = async uid=>{
@@ -74,6 +75,14 @@ const Lists = ({navigation})=>{
     }
     setUpdating(false)
   }
+
+  const HandleRowSwipe = ({direction, extra})=>{
+    if(direction == "left"){
+      DeleteLists([extra.index])
+    }else if (direction == "right"){
+
+    }
+  }
   
   var listsElements
   if(!loading){
@@ -88,7 +97,17 @@ const Lists = ({navigation})=>{
   }
   return (
     <View style={{flex:1}}>
-      <HoldList noItemsComponent={<Text>No Lists</Text>} onDeletePressed={DeleteLists} onRefresh={Refresh} refreshable refreshing={updating||loading}>
+      <HoldList 
+        noItemsComponent={<Text>No Lists</Text>} 
+        onDeletePressed={DeleteLists} 
+        onRefresh={Refresh} 
+        refreshable refreshing={updating||loading}
+        dragableOptions={{
+          onSwipeProgress:console.log,
+          onSwipeRelease:HandleRowSwipe,
+          swipeRemove:{left:true,right:false}
+        }}
+      >
         {listsElements}
       </HoldList>
       <ActionButton actions={{
