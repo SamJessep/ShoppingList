@@ -58,15 +58,15 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
     return selectedIndexes
   }
   return (
-    <View>
+    <>
     <ScrollView refreshControl={
       <RefreshControl onRefresh={onRefresh} enabled={refreshable} refreshing={refreshing}/>
     }>
       {children.length > 0 ?
-        listItems.map((child,key)=>(
+        listItems.map((child,index)=>(
         <HoldListItem 
-          key={key}
-          index={key}
+          key={child.key}
+          index={index}
           selected={child.__selected}
           mode={mode} 
           onItemPress={PressItem} 
@@ -88,7 +88,7 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
       }
       <Button onPress={()=>onDeletePressed(GetSelectedIndexes())} color="red" title="delete"/>
     </View>}
-    </View>
+    </>
   )
 }
 

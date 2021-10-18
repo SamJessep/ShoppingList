@@ -6,6 +6,8 @@ import { Button, Provider as PaperProvider, Subheading, Text } from 'react-nativ
 import { AppRegistry, View } from 'react-native';
 import { name as appName } from '../app.json';
 import config from "react-native-config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const initialState = {
   loggedIn:false,
@@ -39,26 +41,21 @@ const reducer = (state=initialState, action)=>{
 const store = createStore(reducer)
 
 const App = () => {
-  const [server,setServer] = useState("")
-  useEffect(()=>{
-    global.APP_CONFIG={
-      ...config,
-      API_URL:server
+  useState(async ()=>{
+    try{
+      const app_config_string = await AsyncStorage.getItem('app-config')
+      global.APP_CONFIG = JSON.parse(app_config_string) || {}
+    }catch{
+      global.APP_CONFIG={
+        ...config
+      }
     }
-  },[server])
+  },[])
 
-
-console.log(server)
   return (
     <Provider store={store}>
       <PaperProvider>
-        {server != "" ? <ShoppingListApp/> : <View style={{flex:1, justifyContent:"space-around"}}>
-          <Subheading style={{alignSelf:"center"}}>Select Server</Subheading>
-          <View>
-            <Button mode="contained" style={{marginBottom:10}} onPress={()=>setServer(config.API_URL_DEV)}>Development</Button>
-            <Button mode="contained" onPress={()=>setServer(config.API_URL_PROD)}>Production</Button>
-          </View>
-        </View>} 
+        <ShoppingListApp/> 
       </PaperProvider>
     </Provider>
   );

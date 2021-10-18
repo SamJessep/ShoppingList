@@ -1,11 +1,10 @@
 import React, { useRef,useState } from "react";
 import { Animated, View, StyleSheet, PanResponder, Text, useWindowDimensions } from "react-native";
 
-const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipeRemove={left:true,right:false}, extra}) => {
+const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipeActions={left:"RESET",right:"RESET"}, extra}) => {
   const pan = useRef(new Animated.ValueXY()).current;
-  const [color,setColor] = useState("blue")
   const { height, width } = useWindowDimensions();
-  const swipeThreshold = 80
+  const swipeThreshold = (width/5)-5
   const swipeAnimationDuration = 300
 
   const panResponder = useRef(
@@ -14,17 +13,29 @@ const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipe
       onPanResponderGrant: () => {
         pan.setOffset({
           x: pan.x._value,
-          y: pan.y._value
+          y: 0
         });
       },
-      onPanResponderMove: Animated.event(
-        [
-          null,
-          { dx: pan.x, dy: pan.y }
-        ],{
-          useNativeDriver:false,
-          listener: () => showProgress(pan.x._value)}
-      ),
+      onPanResponderMove: (e, gesture)=>{
+        const blockDrag = (gesture.dx>0 && swipeActions.right == "NONE") || (gesture.dx<0 && swipeActions.left == "NONE")
+        const maxDragBlocked = Math.abs(gesture.dx)>(width/5)
+        var blockedValues={}
+        if(blockDrag){
+          blockedValues.dx = blockedValues.dy = 0
+        }
+        if (maxDragBlocked){
+          blockedValues.dy = 0
+          blockedValues.dx = gesture.dx>0 ? (width/5): -(width/5)
+        }
+        return Animated.event(
+          [
+            null,
+            { dx: pan.x, dy: pan.y }
+          ],{
+            useNativeDriver:false,
+            listener: () => showProgress(pan.x._value)}
+        )(e,blockDrag||maxDragBlocked? blockedValues : gesture)
+      },
       onPanResponderRelease: () => {
         pan.flattenOffset();
         const swipeDistance = Math.abs(pan.x._value)
@@ -43,27 +54,27 @@ const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipe
       direction:xOffSet<0 ?"left" : (xOffSet>0? "right" : "center"),
       extra:extra
     }
-    if(xOffSet>0){
-      if(swipeRemove.right) return onSwipeRelease(eventParams)
-      Animated.timing(pan,{
-        toValue:{
-          x:width,
-          y:0
-        },
-        duration:swipeAnimationDuration,
-        useNativeDriver:false
-      }).start(()=>onSwipeRelease(eventParams))
-    }else{
-      if(swipeRemove.left) return onSwipeRelease(eventParams)
-      Animated.timing(pan,{
-        toValue:{
-          x:-width,
-          y:0
-        },
-        duration:swipeAnimationDuration,
-        useNativeDriver:false
-      }).start()
-    } 
+
+    performSwipeAction(xOffSet<0, swipeActions[xOffSet<0?"left":"right"], eventParams)
+  }
+
+  const performSwipeAction = (isLeftSide, actionName,e)=>{
+    const actions = {
+      "RESET":()=>{Reset();onSwipeRelease(e)},
+      "SLIDE":()=>{
+        Animated.timing(pan,{
+          toValue:{
+            x:isLeftSide ? -width : width,
+            y:0
+          },
+          duration:swipeAnimationDuration,
+          useNativeDriver:false
+        }).start(()=>onSwipeRelease(e))
+      },
+      "NONE":()=>onSwipeRelease(e)
+    }
+
+    actions[actionName]()
   }
 
   const Reset = ()=>{
@@ -71,16 +82,7 @@ const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipe
   }
 
   const showProgress = xOffSet=>{
-    setColor("blue")
     const actionProgress = Math.abs(xOffSet)/80
-    if(xOffSet>0){
-      //Right
-      if(Math.abs(xOffSet)>swipeThreshold) setColor("green")
-    }else{
-      //Left
-      if(Math.abs(xOffSet)>swipeThreshold) setColor("red")
-    }
-
     onSwipeProgress({
       direction: xOffSet<0 ?"left" : (xOffSet>0? "right" : "center"),
       progress:actionProgress,
@@ -95,7 +97,7 @@ const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipe
       }}
       {...panResponder.panHandlers}
     >
-    <View style={{backgroundColor:color}}>
+    <View>
       {children}
     </View>
     </Animated.View>
