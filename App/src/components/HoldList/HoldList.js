@@ -5,7 +5,7 @@ import {CHECK_MODE, EDIT_MODE} from "../../routes/List/Modes"
 import {useStateWithDep} from '../../customHooks'
 
 
-const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, onRefresh,refreshable=false, refreshing=false}) =>{
+const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, onRefresh,refreshable=false, refreshing=false,dragableOptions={}}) =>{
   const [mode, setMode] = React.useState(CHECK_MODE)
   const [listItems, setListItems] = useStateWithDep(children)
   const [selectedCount, setSelectedCount] = React.useState(0)
@@ -58,21 +58,22 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
     return selectedIndexes
   }
   return (
-    <View>
+    <>
     <ScrollView refreshControl={
       <RefreshControl onRefresh={onRefresh} enabled={refreshable} refreshing={refreshing}/>
     }>
       {children.length > 0 ?
-        listItems.map((child,key)=>(
+        listItems.map((child,index)=>(
         <HoldListItem 
-          key={key}
-          index={key}
+          key={child.key}
+          index={index}
           selected={child.__selected}
           mode={mode} 
           onItemPress={PressItem} 
           onItemSelect={SelectItem} 
           setMode={(m)=>setMode(m)}
-          data={child}>
+          data={child}
+          dragableOptions={dragableOptions}>
             {child.component}
         </HoldListItem> 
       )): refreshing ? <></> : noItemsComponent}
@@ -87,7 +88,7 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
       }
       <Button onPress={()=>onDeletePressed(GetSelectedIndexes())} color="red" title="delete"/>
     </View>}
-    </View>
+    </>
   )
 }
 

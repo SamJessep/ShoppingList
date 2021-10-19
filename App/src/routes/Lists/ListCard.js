@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
   card:{
     padding:10,
     backgroundColor:"#cccccc",
-    margin:10,
-    borderRadius:10
+    // margin:10,
+    // borderRadius:10,
   },
   name:{
     fontSize:20
