@@ -13,5 +13,7 @@
     <string name="API_URL_DEV" translatable="false">"http://192.168.1.80:3000/"</string>
     <!-- Value from default config. -->
     <string name="API_URL_PROD" translatable="false">"https://shopping-list-rn.herokuapp.com/"</string>
+    <!-- Value from default config. -->
+    <string name="REALM_API_KEY" translatable="false">"TWYGniHWREaK4y8ef0635YtZel3JU0ddXl5eTMpMqzYLqVAq0wZzpH06r0MNgWIK"</string>
 
 </resources>

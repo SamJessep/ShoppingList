@@ -1,7 +1,7 @@
 import React, { useRef,useState } from "react";
 import { Animated, View, StyleSheet, PanResponder, Text, useWindowDimensions } from "react-native";
 
-const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipeActions={left:"RESET",right:"RESET"}, extra}) => {
+const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipeActions={left:"RESET",right:"RESET"}, extra, resetDrag}) => {
   const pan = useRef(new Animated.ValueXY()).current;
   const { height, width } = useWindowDimensions();
   const swipeThreshold = (width/5)-5
@@ -40,7 +40,6 @@ const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipe
         pan.flattenOffset();
         const swipeDistance = Math.abs(pan.x._value)
         if(swipeDistance< swipeThreshold){
-          console.log("Swipe Canceled")
           return pan.setValue({x:0,y:0})
         }
 
@@ -90,6 +89,9 @@ const Dragable = ({children,onSwipeProgress=()=>{}, onSwipeRelease=()=>{}, swipe
     })
   }
 
+  if(resetDrag && pan.x._value != 0){
+    Reset()
+  }
   return (
     <Animated.View
       style={{

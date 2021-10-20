@@ -1,131 +1,178 @@
 import React from 'react'
 import AddItem from './AddItem';
-import Confirm from '../../components/Confirm';
 import Item from './Item.js'
 import {
   StyleSheet,
   Text,
   View,
-  Button
 } from 'react-native';
 import config from "react-native-config";
 import HoldList from '../../components/HoldList/HoldList';
-import { CHECK_MODE, EDIT_MODE } from './Modes';
+import { realmApp } from '../../RealmApp';
+import {ItemSchema, ListSchema} from "../../ObjectSchemas"
+import {BSON} from 'realm';
+import { ActivityIndicator, Button, Dialog, Paragraph, Portal } from 'react-native-paper';
+import SyncStatus from '../../SyncStatus';
 
-const RemoveItemFromDB = async (item,listid) =>{
-    await fetch(APP_CONFIG.API_URL+`lists/id/${listid}/delete/${item.id}`, {method:"DELETE"})
-    const newList = await fetch(APP_CONFIG.API_URL+`lists/id/${listid}`).then(r=>r.json())
-    return newList.items
-}
 
-const FetchItems = async (listid) =>{
-  const list = await fetch(APP_CONFIG.API_URL+"/lists/id/"+uid).then(res=>res.json())
-  return list.items
-}
-
-const UpdateItemInDB = async (newItem, listid, itemid)=>{
-  delete newItem["id"]
-  delete newItem["listID"]
-  const dbItem = await fetch(APP_CONFIG.API_URL+`lists/id/${listid}/update/${itemid}`, {
-    method:"POST",
-    headers:{'Content-Type': 'application/json'},
-    body:JSON.stringify(newItem)
-  }).then(res=>res.json())
-  return dbItem
-}
-
+const {REALM_API_KEY} = config
 const List = ({route})=>{
   const list = route.params.list
   const [updating, setUpdating] = React.useState(false)
-  const [items, setitems] = React.useState(list.items.map(i=>{return {...i,selected:false}}))
-  const [mode, setMode] = React.useState(CHECK_MODE)
-  const [selectedCount, setSelectedCount] = React.useState(0)
+  const [items, setItems] = React.useState([])
+  const [loadingItems, setLoadingItems] = React.useState(true)
+
+  const [deleteWaring, setDeleteWaring] = React.useState({showDialog:false})
+  const [resetDrag, setResetDrag] = React.useState(false)
+  
+  const realmReference = React.useRef(null);
+  React.useEffect(() => {
+    const credentials = Realm.Credentials.serverApiKey(REALM_API_KEY)
+    realmApp.logIn(credentials).then(()=>{
+      const config = {
+        schema: [ItemSchema],
+        sync: {
+          user: realmApp.currentUser,
+          partitionValue: list.id,
+          newRealmFileBehavior:{type: "openImmediately"},
+          existingRealmFileBehavior:{type: "openImmediately"}
+        },
+      };
+      
+      Realm.open(config)
+        .then(realmInstance => {
+          realmReference.current = realmInstance;
+          const realm = realmReference.current;
+          if (realm) {
+            const sortedItems = realmReference.current
+              .objects('Item')
+              .sorted("createdAt",true)
+            setItems([...sortedItems]);
+
+            sortedItems.addListener(() => {
+              setItems([...sortedItems]);
+            });
+          }
+        })
+        .catch(err => {
+          console.log(`an error occurred opening the realm ${err}`);
+          console.error(err)
+        }).finally(()=>setLoadingItems(false));
+    })
+
+    // cleanup function to close realm after component unmounts
+    return () => {
+      const realm = realmReference.current;
+      // if the realm exists, close the realm
+      if (realm) {
+        realm.close();
+        // set the reference to null so the realm can't be used after it is closed
+        realmReference.current = null;
+        setItems([]); // set the Items state to an empty array since the component is unmounting
+      }
+    };
+  }, [realmReference, setItems]);
   
   const AddItemToItems = async (item,listid) =>{
-    setitems([...items,item])
-    await fetch(APP_CONFIG.API_URL+`lists/id/${listid}/add`, {
-      method:"POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(item)
-    }).then(r=>r.json()).catch(console.error)
-    const newList = await fetch(APP_CONFIG.API_URL+`lists/id/${listid}`).then(r=>r.json())
-    Refresh(newList.items)
+    const realm = realmReference.current
+    if(realm){
+      realm.write(()=>{
+        realm.create("Item", {
+          _id: new BSON.ObjectID(),
+          ...item
+        })
+      })
+    }
   }
   
 
-  const RemoveItem = async (item, localUpdate=true) =>{
-    if(localUpdate){
-      const newItems = items.filter(i=>i.id !== item.id)
-      setitems(newItems)
-    }
-    const dbItems = await RemoveItemFromDB(item, list.id)
-    if(localUpdate){
-      Refresh(dbItems)
+  const RemoveItem = async (item) =>{
+    const realm = realmReference.current
+    if(realm){
+      item = realm.objectForPrimaryKey('Item', item._id);
+      realm.write(()=>{
+        realm.delete(item)
+      })
     }
   }
 
-  const DeleteMany = async indexes =>{
-    var itemsToDelete = items.filter((_,index)=>indexes.includes(index))
-    const newItems = items.filter((_,index)=>!indexes.includes(index))
-    setitems(newItems)
-    for(let item of itemsToDelete){
-      await RemoveItem(item,false)
-    }
-    await Refresh()
+  const DeleteMany = indexes =>{
+    setDeleteWaring({
+      showDialog:true,
+      target:indexes.length == 1 ? items[indexes[0]].name : indexes.length+" items",
+      onConfirm:()=>{
+        var itemsToDelete = items.filter((_,index)=>indexes.includes(index))
+        itemsToDelete.forEach(item=>RemoveItem(item))
+        setDeleteWaring({showDialog:false})
+      },
+      onCancel:()=>{
+        setResetDrag(true)
+        setDeleteWaring({showDialog:false})
+        setTimeout(()=>setResetDrag(false),500)
+      }
+    })
   }
 
   const ListItemClicked = async (item)=>{
-    var newItems = items.map(i=>{
-      if(i.key === item.key)i.checked=!i.checked
-      return i
-    })
-    setitems(newItems)
-    const dbItem = await UpdateItemInDB({checked:item.checked}, list.id, item.id)
-    if(JSON.stringify(dbItem) !== JSON.stringify(item)){
-      newItems.map(i=>i.id===dbItem.id?dbItem:i)
-      setitems(newItems)
+    const realm = realmReference.current
+    if(realm){
+      item = realm.objectForPrimaryKey('Item', item._id);
+      realm.write(()=>{
+        item.checked = !item.checked
+      })
     }
   }
 
-  const Refresh = async(dbItems=false)=>{
-    setUpdating(true)
-    if(!dbItems){
-      dbItems = await FetchItems(list.id)
+  const HandleRowSwipe = async ({direction, extra})=>{
+    if(direction == "left"){
+      DeleteMany([extra.index])
+    }else if (direction == "right"){
+      ListItemClicked(items[extra.index])
     }
-    if(JSON.stringify(dbItems) !== JSON.stringify(items)){
-      setitems(dbItems)
-    }
-    setUpdating(false)
   }
 
-  const deleteButtonText = `Delete ${selectedCount} item${selectedCount>1?"s":""}`
   const listItems = items.map((item) =>{
     return {
+      key:item.key,
       component:<Item data={item} key={item.key}/>,
       onClick:()=>ListItemClicked(item)
     }
-  }
-  );
+  });
   return(
   <View>
-    <Text style={styles.title}>{list.name}</Text>
+  <SyncStatus/>
     <AddItem onAddItem={AddItemToItems} list={list}></AddItem>
     <View style={styles.divider}></View>
-    <Text>Items</Text>
-    <HoldList noItemsComponent={<Text>No Items</Text>} onDeletePressed={DeleteMany} onRefresh={Refresh} refreshable refreshing={updating}>
+    {loadingItems? 
+    <View>
+      <Text style={styles.loadingText}>Fetching items</Text>
+      <ActivityIndicator size="large"/>
+    </View> :
+    <HoldList 
+      noItemsComponent={<Text>No Items</Text>} 
+      onDeletePressed={DeleteMany}
+      dragableOptions={{
+          onSwipeProgress:()=>{},
+          onSwipeRelease:HandleRowSwipe,
+          swipeActions:{left:"SLIDE",right:"RESET"}
+      }}
+      resetDrag={resetDrag}
+      >
       {listItems}
     </HoldList>
-    {mode === EDIT_MODE &&
-    <View style={styles.itemControls}>
-      <Button title="Cancel" color="orange" onPress={CancelSelect}/>
-      <Button title={deleteButtonText} color="red" onPress={DeleteSelected}/>
-      {selectedCount === items.length ? 
-      <Button title="Unselect all" color="red" onPress={()=>SelectAll(false)}/>:
-      <Button title="Select all" color="red" onPress={SelectAll}/>}
-      {selectedCount==1&&<Button title="Edit" color="orange" onPress={DeleteSelected}/>}
-    </View>}
+    }
+    <Portal>
+      <Dialog visible={deleteWaring.showDialog} onDismiss={()=>setDeleteWaring({showDialog:false})}>
+        <Dialog.Title>Warning</Dialog.Title>
+        <Dialog.Content>
+          <Paragraph>Are you sure you want to delete {deleteWaring.target}</Paragraph>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={deleteWaring.onConfirm} mode="contained" color="red" style={{marginHorizontal:10, paddingHorizontal:10}}>Yes</Button>
+          <Button onPress={deleteWaring.onCancel} mode="contained" color="green" style={{marginHorizontal:10, paddingHorizontal:10}}>No</Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
     </View>
   )
 }
@@ -159,6 +206,10 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     width:"100%",
     justifyContent:"space-around"
+  },
+  loadingText:{
+    alignSelf:"center",
+    marginBottom:20
   }
 });
 

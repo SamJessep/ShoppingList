@@ -5,7 +5,7 @@ import {CHECK_MODE, EDIT_MODE} from "../../routes/List/Modes"
 import {useStateWithDep} from '../../customHooks'
 
 
-const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, onRefresh,refreshable=false, refreshing=false,dragableOptions={}}) =>{
+const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, onRefresh,refreshable=false, refreshing=false,dragableOptions={}, resetDrag}) =>{
   const [mode, setMode] = React.useState(CHECK_MODE)
   const [listItems, setListItems] = useStateWithDep(children)
   const [selectedCount, setSelectedCount] = React.useState(0)
@@ -64,7 +64,8 @@ const HoldListInner = ({children,onItemPress,noItemsComponent,onDeletePressed, o
     }>
       {children.length > 0 ?
         listItems.map((child,index)=>(
-        <HoldListItem 
+        <HoldListItem
+          resetDrag={resetDrag}
           key={child.key}
           index={index}
           selected={child.__selected}

@@ -31,6 +31,8 @@ import com.swmansion.rnscreens.RNScreensPackage;
 import com.reactlibrary.securekeystore.RNSecureKeyStorePackage;
 // react-native-vector-icons
 import com.oblador.vectoricons.VectorIconsPackage;
+// realm
+import io.realm.react.RealmReactPackage;
 
 public class PackageList {
   private Application application;
@@ -85,7 +87,8 @@ public class PackageList {
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
       new RNSecureKeyStorePackage(),
-      new VectorIconsPackage()
+      new VectorIconsPackage(),
+      new RealmReactPackage()
     ));
   }
 }

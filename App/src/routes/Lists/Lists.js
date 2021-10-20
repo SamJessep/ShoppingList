@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, Button, StyleSheet} from "react-native"
+import {View, ScrollView, StyleSheet} from "react-native"
 import React from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CreateListModal from "../List/CreateListModal.js";
@@ -8,7 +8,7 @@ import CreateGroupModal from "../List/CreateGroupModal.js";
 import HoldList from "../../components/HoldList/HoldList";
 import ActionButton from "./ActionButton.js";
 import Dragable from "../../Dragable.js";
-import { Snackbar } from "react-native-paper";
+import { Dialog, Paragraph, Portal, Snackbar, Button, Text } from "react-native-paper";
 import { useHistory } from "../../customHooks.js";
 
 
@@ -30,10 +30,10 @@ const Lists = ({navigation})=>{
   const [createListModalOpen, setCreateListModalOpen] = React.useState(false)
   const [createGroupModalOpen, setCreateGroupModalOpen] = React.useState(false)
   const [groups, setGroups] = React.useState([])
+  const [deleteWaring, setDeleteWaring] = React.useState({showDialog:false})
   
   const [undoDeleteVisable, setUndoDeleteVisable] = React.useState(false)
-  const [onUndoDissmissed, setOnUndoDissmissed] = React.useState(()=>console.log("undo dismissed"))
-  const [onUndoPressed, setonUndoPressed] = React.useState(()=>console.log("undo pressed"))
+  const [resetDrag, setResetDrag] = React.useState(false)
   
   
   const loadList = async list =>{
@@ -65,18 +65,28 @@ const Lists = ({navigation})=>{
   }
 
   const DeleteLists = async (indexes, localOnly=false)=>{
-    var listsToDelete = lists.filter((_,index)=>indexes.includes(index))
-    const newLists = lists.filter((_,index)=>!indexes.includes(index))
-    setLists(newLists)
-    if(indexes.length == 1) setUndoDeleteVisable(true)
-    if(!localOnly){
-      for(let list of listsToDelete){
-        await RemoveListFromDB(list)
+    setDeleteWaring({
+      showDialog:true,
+      target:indexes.length == 1 ? lists[indexes[0]].name : indexes.length+" lists",
+      onConfirm:async ()=>{
+        var listsToDelete = lists.filter((_,index)=>indexes.includes(index))
+        const newLists = lists.filter((_,index)=>!indexes.includes(index))
+        setLists(newLists)
+        if(indexes.length == 1) setUndoDeleteVisable(true)
+        if(!localOnly){
+          for(let list of listsToDelete){
+            await RemoveListFromDB(list)
+          }
+          await Refresh()
+        }
+        setDeleteWaring({showDialog:false})
+      },
+      onCancel:()=>{
+        setResetDrag(true)
+        setDeleteWaring({showDialog:false})
+        setTimeout(()=>setResetDrag(false),500)
       }
-      await Refresh()
-    }
-    console.log(listsToDelete)
-    return listsToDelete
+    })
   }
 
   const Refresh = async ()=>{
@@ -116,6 +126,7 @@ const Lists = ({navigation})=>{
         onDeletePressed={DeleteLists} 
         onRefresh={Refresh} 
         refreshable refreshing={updating||loading}
+        resetDrag={resetDrag}
         dragableOptions={{
           onSwipeProgress:()=>{},
           onSwipeRelease:HandleRowSwipe,
@@ -140,6 +151,19 @@ const Lists = ({navigation})=>{
       </Snackbar>
       {createListModalOpen && <CreateListModal closeModal={()=>setCreateListModalOpen(false)} groups={groups} createdGroup={loadList}/>}
       {createGroupModalOpen && <CreateGroupModal closeModal={()=>setCreateGroupModalOpen(false)} />}
+      <Portal>
+
+      <Dialog visible={deleteWaring.showDialog} onDismiss={()=>setDeleteWaring({showDialog:false})}>
+        <Dialog.Title>Warning</Dialog.Title>
+        <Dialog.Content>
+          <Paragraph>Are you sure you want to delete {deleteWaring.target}</Paragraph>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={deleteWaring.onConfirm} mode="contained" color="red" style={{marginHorizontal:10, paddingHorizontal:10}}>Yes</Button>
+          <Button onPress={deleteWaring.onCancel} mode="contained" color="green" style={{marginHorizontal:10, paddingHorizontal:10}}>No</Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
     </View>
   )
 }

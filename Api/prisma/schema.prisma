@@ -42,6 +42,7 @@ model List {
 
 model Item {
   id      String  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  partition String
   key    String
   name    String
   checked Boolean

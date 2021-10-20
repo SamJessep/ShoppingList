@@ -4,7 +4,7 @@ import { Checkbox, TouchableRipple } from 'react-native-paper';
 import Dragable from "../../Dragable";
 import {CHECK_MODE, EDIT_MODE} from "../../routes/List/Modes"
 import SwipeIndicators from "../../SwipeIndicators";
-const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,selected,data,dragableOptions}) =>{
+const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,selected,data,dragableOptions, resetDrag}) =>{
   
   const LongPress = ()=>{
     setMode(EDIT_MODE)
@@ -21,7 +21,7 @@ const HoldListItem = ({index,children,mode, onItemPress, onItemSelect, setMode,s
   }
   return (
     <View style={styles.rowOuter}>
-    <Dragable {...dragableOptions} extra={{index:index}}>
+    <Dragable {...dragableOptions} extra={{index:index}} resetDrag={resetDrag}>
       <SwipeIndicators>
         <TouchableRipple onPress={ShortPress} onLongPress={LongPress} style={[selected&&styles.selected]}>
           <View style={styles.rowInner}>

@@ -40,7 +40,7 @@ const ShoppingListApp = (props) => {
           <>
           {props.needsSetup && <Stack.Screen name="LoadAccount" component={LoadAccount} options={{headerShown:false}}/>}
             <Stack.Screen name="Landing" component={Landing} options={{headerShown:false}}/>
-            <Stack.Screen name="List" component={List}/>
+            <Stack.Screen name="List" component={List} options={({ route }) => ({ title: route.params.list.name })}/>
           </>  
           }
           </Stack.Navigator>

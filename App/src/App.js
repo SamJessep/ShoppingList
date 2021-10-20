@@ -8,7 +8,6 @@ import { name as appName } from '../app.json';
 import config from "react-native-config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const initialState = {
   loggedIn:false,
   needsSetup:true
@@ -51,7 +50,7 @@ const App = () => {
       }
     }
   },[])
-
+  
   return (
     <Provider store={store}>
       <PaperProvider>

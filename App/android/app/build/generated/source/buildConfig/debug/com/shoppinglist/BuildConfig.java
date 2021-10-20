@@ -15,4 +15,6 @@ public final class BuildConfig {
   public static final String API_URL_DEV = "http://192.168.1.80:3000/";
   // Field from default config.
   public static final String API_URL_PROD = "https://shopping-list-rn.herokuapp.com/";
+  // Field from default config.
+  public static final String REALM_API_KEY = "TWYGniHWREaK4y8ef0635YtZel3JU0ddXl5eTMpMqzYLqVAq0wZzpH06r0MNgWIK";
 }

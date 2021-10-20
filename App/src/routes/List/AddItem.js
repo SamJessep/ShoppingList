@@ -13,9 +13,12 @@ const AddItem = ({onAddItem:saveItem, list})=>{
   const [text, setText] = React.useState("")
   const sendItem = ()=>{
     const item = {
+      partition:list.id,
       name:text,
       checked:false,
-      key:uuid.v4()
+      key:uuid.v4(),
+      createdAt:new Date(),
+      listID: new Realm.BSON.ObjectID(list.id)
     }
     saveItem(item,list.id)
     setText("")

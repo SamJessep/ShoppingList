@@ -650,6 +650,7 @@
     <string name="API_URL" translatable="false">"http://192.168.1.80:3000/"</string>
     <string name="API_URL_DEV" translatable="false">"http://192.168.1.80:3000/"</string>
     <string name="API_URL_PROD" translatable="false">"https://shopping-list-rn.herokuapp.com/"</string>
+    <string name="REALM_API_KEY" translatable="false">"TWYGniHWREaK4y8ef0635YtZel3JU0ddXl5eTMpMqzYLqVAq0wZzpH06r0MNgWIK"</string>
     <string name="abc_action_bar_home_description">Navigate home</string>
     <string name="abc_action_bar_up_description">Navigate up</string>
     <string name="abc_action_menu_overflow_description">More options</string>

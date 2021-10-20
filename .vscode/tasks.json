@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "android",
+			"path": "App/",
+			"problemMatcher": [],
+			"label": "npm: android - App",
+			"detail": "react-native run-android"
+		}
+	]
+}
