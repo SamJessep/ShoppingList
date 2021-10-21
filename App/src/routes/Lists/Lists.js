@@ -10,6 +10,7 @@ import ActionButton from "./ActionButton.js";
 import Dragable from "../../Dragable.js";
 import { Dialog, Paragraph, Portal, Snackbar, Button, Text } from "react-native-paper";
 import { useHistory } from "../../customHooks.js";
+import { Picker } from "@react-native-picker/picker";
 
 
 const fetchUserLists = async uid=>{
@@ -19,7 +20,7 @@ const fetchUserLists = async uid=>{
 
 
 const fetchGroups = async uid=>{
-  const groups = await fetch(APP_CONFIG.API_URL+"groups/user/"+uid).then(res=>res.json())
+  const groups = await fetch(APP_CONFIG.API_URL+"groups/user/"+uid+"?include=lists.items").then(res=>res.json())
   return groups
 }
 
@@ -31,11 +32,12 @@ const Lists = ({navigation})=>{
   const [createGroupModalOpen, setCreateGroupModalOpen] = React.useState(false)
   const [groups, setGroups] = React.useState([])
   const [deleteWaring, setDeleteWaring] = React.useState({showDialog:false})
-  
   const [undoDeleteVisable, setUndoDeleteVisable] = React.useState(false)
   const [resetDrag, setResetDrag] = React.useState(false)
+
+  const [selectedGroupID, setselectedGroupID] = React.useState("ALL")
   
-  
+  const [allLists, setAllLists] = React.useState([])
   const loadList = async list =>{
     navigation.navigate("List", {list:list})
   }
@@ -43,7 +45,7 @@ const Lists = ({navigation})=>{
   React.useEffect(async () => {
     const uid = await AsyncStorage.getItem("userId")
     Promise.all([
-      fetchUserLists(uid).then(usersLists=>setLists(usersLists)),
+      fetchUserLists(uid).then(setAllLists),
       fetchGroups(uid).then(groups=>{setGroups(groups)})
     ]).then(_=>setloading(false))
   }, [])
@@ -106,6 +108,15 @@ const Lists = ({navigation})=>{
 
     }
   }
+
+  React.useEffect(() => {
+    if(loading)return 
+    if(selectedGroupID === "ALL"){
+      setLists(allLists)
+    }else{
+      setLists(groups.find(g=>g.id==selectedGroupID).lists)
+    }
+  }, [selectedGroupID,loading])
   
   var listsElements
   if(!loading){
@@ -121,6 +132,12 @@ const Lists = ({navigation})=>{
   }
   return (
     <View style={{flex:1}}>
+      <Picker mode="dropdown" onValueChange={setselectedGroupID} selectedValue={selectedGroupID}>
+        <Picker.Item key="ALL" value="ALL" label="All lists"/>
+        {groups.map(g=>(
+          <Picker.Item key={g.id} value={g.id} label={g.name+"'s lists"}/>
+        ))}
+      </Picker>
       <HoldList 
         noItemsComponent={<Text>No Lists</Text>} 
         onDeletePressed={DeleteLists} 
@@ -149,7 +166,7 @@ const Lists = ({navigation})=>{
         }}
       >List Deleted
       </Snackbar>
-      <CreateListModal open={createListModalOpen} closeModal={()=>setCreateListModalOpen(false)} groups={groups} createdGroup={loadList}/>
+      <CreateListModal open={createListModalOpen} closeModal={()=>setCreateListModalOpen(false)} groups={groups} createdList={loadList}/>
       <CreateGroupModal open={createGroupModalOpen} closeModal={()=>setCreateGroupModalOpen(false)}/>
       <Portal>
 

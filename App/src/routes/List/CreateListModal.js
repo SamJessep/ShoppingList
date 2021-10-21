@@ -9,7 +9,7 @@ import globalStyles from '../../styles/styles'
 import uuid from 'react-native-uuid';
 import { Button, Dialog, HelperText, Portal, TextInput } from "react-native-paper";
 
-const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvalid)=>{
+const createList = async (groupid,name, setLoading, createdList, closeModal,setNameIsInvalid)=>{
   if(name == "")
   return setNameIsInvalid(true)
   setLoading(true)
@@ -24,7 +24,8 @@ const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvali
         key: uuid.v4()
       })
     }).then(r=>r.json()).catch(console.error)
-    createdGroup(list)
+    closeModal()
+    createdList(list)
   }
   catch(e){
     console.error(e)
@@ -33,14 +34,13 @@ const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvali
   setLoading(false)
 }
 
-const CreateListModal = ({open,closeModal, groups, createdGroup})=>{
+const CreateListModal = ({open,closeModal, groups, createdList})=>{
   const [name, setName] = React.useState("")
   const [loading, setLoading] = React.useState(false)
   const [selectedGroup, setSelectedGroup] = React.useState(groups[0] ? groups[0].id:null)
   const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false)
   const [usersGroups, setUsersGroups] = React.useState(groups)
   const [nameIsInvalid, setNameIsInvalid] = React.useState(false)
-  useBackHandler(()=>closeModal())
 
 
   const closeGroupModal = async (newGroups=false, createdGroup)=>{
@@ -60,14 +60,14 @@ const CreateListModal = ({open,closeModal, groups, createdGroup})=>{
         </Pressable>
         <Dialog.Content>
         <View style={styles.container}>
-          <Text>Name</Text>
-          <TextInput error={nameIsInvalid} onChangeText={name=>{setNameIsInvalid(false); setName(name)}}/>
+          <TextInput error={nameIsInvalid} onChangeText={name=>{setNameIsInvalid(false); setName(name)}} mode="outlined" label="List name"/>
           <HelperText type="error" visible={nameIsInvalid}>
             List name is required
           </HelperText>
           <Text>Group</Text>
           {usersGroups.length == 0 ? <Text>You have no groups</Text> :
-          <Picker style={styles.textField} 
+          <Picker style={styles.textField}
+            mode="dropdown"
             selectedValue={selectedGroup}
             onValueChange={group =>setSelectedGroup(group)}
           >
@@ -81,7 +81,7 @@ const CreateListModal = ({open,closeModal, groups, createdGroup})=>{
           <CreateGroupModal open={showCreateGroupModal} closeModal={closeGroupModal}/>
           
           {loading ? <Button mode="contained" loading={loading}>Creating list</Button> :
-          <Button mode="contained" onPress={()=>createList(selectedGroup,name,setLoading,createdGroup,setNameIsInvalid)}>Create</Button>}
+          <Button mode="contained" onPress={()=>createList(selectedGroup,name,setLoading,createdList,closeModal,setNameIsInvalid)}>Create</Button>}
         </View>
         </Dialog.Content>
       </Dialog>

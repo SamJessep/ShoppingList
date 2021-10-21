@@ -26,21 +26,15 @@ const Settings = ()=>{
   return(
     <View style={{flex:1, margin:10}}>
       <View style={styles.control_row}>
-        <Text>Server Address:</Text>
+        <Text>Server Address</Text>
         <Text style={{fontWeight:"700"}}>{config.API_URL}</Text>
       </View>
-      <View style={styles.control_row}>
-        <Text>Use Production API</Text>
-        <Switch value={useProductionAPI} onValueChange={setUseProductionAPI}/>
-      </View>
-      <Button title="Save" onPress={Save}/>
-      <Button title="Discard Changes" onPress={Cancel}/>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  control_row:{flexDirection:"row", justifyContent:"space-between"}
+  control_row:{}
 })
 
 

@@ -53,8 +53,7 @@ const CreateGroupModal = ({open,closeModal})=>{
         </Pressable>
         <Dialog.Content>
           <View style={styles.container}>
-            <Text>Name</Text>
-            <TextInput onChangeText={setName}/>
+            <TextInput onChangeText={setName} mode="outlined" label="Group name"/>
             <HelperText type="error" visible={nameIsInvalid}>
               Group name is required
             </HelperText>
