@@ -56,7 +56,7 @@ exports.plugin = {
             })   
             res = await prisma.group.create({
               data:{
-                name:payload.name,
+                ...payload,
                 members:[user.id]
               }
             })

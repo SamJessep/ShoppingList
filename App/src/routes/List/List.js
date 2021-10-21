@@ -9,7 +9,7 @@ import {
 import config from "react-native-config";
 import HoldList from '../../components/HoldList/HoldList';
 import { realmApp } from '../../RealmApp';
-import {ItemSchema, ListSchema} from "../../ObjectSchemas"
+import {ItemSchema, ListSchema, MakeSafe} from "../../ObjectSchemas"
 import {BSON} from 'realm';
 import { ActivityIndicator, Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import SyncStatus from '../../SyncStatus';
@@ -89,9 +89,10 @@ const List = ({route})=>{
   const RemoveItem = async (item) =>{
     const realm = realmReference.current
     if(realm){
-      item = realm.objectForPrimaryKey('Item', item._id);
       realm.write(()=>{
+        item = realm.objectForPrimaryKey('Item', item._id);
         realm.delete(item)
+        item = null
       })
     }
   }
@@ -131,11 +132,11 @@ const List = ({route})=>{
     }
   }
 
-  const listItems = items.map((item) =>{
+  const listItems = items.filter(i=>i.isValid()).map((listItem) =>{
     return {
-      key:item.key,
-      component:<Item data={item} key={item.key}/>,
-      onClick:()=>ListItemClicked(item)
+      key:listItem.key,
+      component:<Item data={listItem} key={listItem.key}/>,
+      onClick:()=>ListItemClicked(listItem)
     }
   });
   return(
@@ -162,7 +163,7 @@ const List = ({route})=>{
     </HoldList>
     }
     <Portal>
-      <Dialog visible={deleteWaring.showDialog} onDismiss={()=>setDeleteWaring({showDialog:false})}>
+      <Dialog visible={deleteWaring.showDialog} onDismiss={()=>setDeleteWaring({showDialog:false})} onDismiss={deleteWaring.onCancel}>
         <Dialog.Title>Warning</Dialog.Title>
         <Dialog.Content>
           <Paragraph>Are you sure you want to delete {deleteWaring.target}</Paragraph>

@@ -5,36 +5,38 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useBackHandler } from '@react-native-community/hooks'
 import Icon from "react-native-dynamic-vector-icons";
 import globalStyles from "../../styles/styles"
-import { Button, HelperText, TextInput } from "react-native-paper";
+import { Button, Dialog, HelperText, Portal, TextInput } from "react-native-paper";
+import uuid from 'react-native-uuid';
 
 const createGroup = async (name,setloading, closeModal,setNameIsInvalid)=>{
   if(name == "") return setNameIsInvalid(true)
   try{
     setloading(true)
     const userid = await AsyncStorage.getItem("userId")
-    const group = await fetch(APP_CONFIG.API_URL+"groups/create", {
+    const createRes = await fetch(APP_CONFIG.API_URL+"groups/create", {
       method:"POST",
       headers: {
         'Content-Type': 'application/json'
       },
       body:JSON.stringify({
         name:name,
-        creatorid:userid
+        key: uuid.v4()
       })
-    }).then(res=>res.json())
+    })
+    if(!createRes.ok) throw new Error(`error code:${createRes.status}. text:${createRes.statusText}`)
+    const group = await createRes.json()
     ToastAndroid.show("created group: "+group.name, ToastAndroid.SHORT)
     setloading(false)
-  
-    const newGroups = await fetch(APP_CONFIG.API_URL+"groups/user/"+userid).then(res=>res.json())
-  
-    console.dir(newGroups)
+    const newGroups = await fetch(APP_CONFIG.API_URL+"groups/user/"+userid).then(_=>_.json())
     closeModal(newGroups,group)
   }catch(e){
+    setloading(false)
+    ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
     console.error(e)
   }
 }
 
-const CreateGroupModal = ({closeModal})=>{
+const CreateGroupModal = ({open,closeModal})=>{
   const [name, setName] = React.useState("")
   const [loading, setloading] = React.useState(false)
   const [nameIsInvalid, setNameIsInvalid] = React.useState(false)
@@ -43,27 +45,30 @@ const CreateGroupModal = ({closeModal})=>{
 
 
   return (
-    <Modal animationType="fade" transparent={false}>
-      <Pressable style={styles.closeButton} onPress={()=>closeModal()}>
-        <Icon type="MaterialCommunityIcons" name="window-close"/>
-      </Pressable>
-      <View style={styles.container}>
-        <Text style={styles.title}>Create a group</Text>
-        <Text>Name</Text>
-        <TextInput onChangeText={setName}/>
-        <HelperText type="error" visible={nameIsInvalid}>
-          Group name is required
-        </HelperText>
-        {loading ? <Button mode="contained" loading={loading}>Creating group</Button> :
-        <Button mode="contained" onPress={()=>{createGroup(name,setloading,closeModal,setNameIsInvalid)}}>Create</Button>}
-      </View>
-    </Modal>
+    <Portal>
+      <Dialog visible={open} onDismiss={closeModal}>
+        <Dialog.Title>Create a group</Dialog.Title>
+        <Pressable style={styles.closeButton} onPress={()=>closeModal()}>
+          <Icon type="MaterialCommunityIcons" name="window-close"/>
+        </Pressable>
+        <Dialog.Content>
+          <View style={styles.container}>
+            <Text>Name</Text>
+            <TextInput onChangeText={setName}/>
+            <HelperText type="error" visible={nameIsInvalid}>
+              Group name is required
+            </HelperText>
+            {loading ? <Button mode="contained" loading={loading}>Creating group</Button> :
+            <Button mode="contained" onPress={()=>{createGroup(name,setloading,closeModal,setNameIsInvalid)}}>Create</Button>}
+          </View>
+        </Dialog.Content>
+      </Dialog>
+    </Portal>
   )
 }
 
 const styles = StyleSheet.create({
   container:{
-    flex:1,
     padding:20,
     justifyContent:"center"
   },

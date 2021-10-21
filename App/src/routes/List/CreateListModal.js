@@ -7,7 +7,7 @@ import { useBackHandler } from '@react-native-community/hooks'
 import Icon from "react-native-dynamic-vector-icons";
 import globalStyles from '../../styles/styles'
 import uuid from 'react-native-uuid';
-import { Button, HelperText, TextInput } from "react-native-paper";
+import { Button, Dialog, HelperText, Portal, TextInput } from "react-native-paper";
 
 const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvalid)=>{
   if(name == "")
@@ -33,7 +33,7 @@ const createList = async (groupid,name, setLoading, createdGroup,setNameIsInvali
   setLoading(false)
 }
 
-const CreateListModal = ({closeModal, groups, createdGroup})=>{
+const CreateListModal = ({open,closeModal, groups, createdGroup})=>{
   const [name, setName] = React.useState("")
   const [loading, setLoading] = React.useState(false)
   const [selectedGroup, setSelectedGroup] = React.useState(groups[0] ? groups[0].id:null)
@@ -52,42 +52,45 @@ const CreateListModal = ({closeModal, groups, createdGroup})=>{
   }
 
   return (
-    <Modal animationType="fade" transparent={false} >
-      <Pressable style={styles.closeButton} onPress={closeModal}>
-        <Icon type="MaterialCommunityIcons" name="window-close"/>
-      </Pressable>
-      <View style={styles.container}>
-        <Text style={styles.title}>Create a list</Text>
-        <Text>Name</Text>
-        <TextInput error={nameIsInvalid} onChangeText={name=>{setNameIsInvalid(false); setName(name)}}/>
-        <HelperText type="error" visible={nameIsInvalid}>
-          List name is required
-        </HelperText>
-        <Text>Group</Text>
-        {usersGroups.length == 0 ? <Text>You have no groups</Text> :
-        <Picker style={styles.textField} 
-          selectedValue={selectedGroup}
-          onValueChange={group =>setSelectedGroup(group)}
-        >
-        {usersGroups.map(group=>(
-          <Picker.Item label={group.name} value={group.id} key={group.id}/>
-        ))}
-        </Picker>}
-        <Pressable onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}>
-          <Text style={{color:"blue", marginBottom:20}}>Create new group</Text>
+    <Portal>
+    <Dialog visible={open} onDismiss={closeModal}>
+      <Dialog.Title>Create a list</Dialog.Title>
+        <Pressable style={styles.closeButton} onPress={closeModal}>
+          <Icon type="MaterialCommunityIcons" name="window-close"/>
         </Pressable>
-        {showCreateGroupModal && <CreateGroupModal closeModal={closeGroupModal}/>}
-        
-        {loading ? <Button mode="contained" loading={loading}>Creating list</Button> :
-        <Button mode="contained" onPress={()=>createList(selectedGroup,name,setLoading,createdGroup,setNameIsInvalid)}>Create</Button>}
-      </View>
-    </Modal>
+        <Dialog.Content>
+        <View style={styles.container}>
+          <Text>Name</Text>
+          <TextInput error={nameIsInvalid} onChangeText={name=>{setNameIsInvalid(false); setName(name)}}/>
+          <HelperText type="error" visible={nameIsInvalid}>
+            List name is required
+          </HelperText>
+          <Text>Group</Text>
+          {usersGroups.length == 0 ? <Text>You have no groups</Text> :
+          <Picker style={styles.textField} 
+            selectedValue={selectedGroup}
+            onValueChange={group =>setSelectedGroup(group)}
+          >
+          {usersGroups.map(group=>(
+            <Picker.Item label={group.name} value={group.id} key={group.id}/>
+          ))}
+          </Picker>}
+          <Button style={{marginBottom:20}} onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}>
+            Create new group
+          </Button>
+          <CreateGroupModal open={showCreateGroupModal} closeModal={closeGroupModal}/>
+          
+          {loading ? <Button mode="contained" loading={loading}>Creating list</Button> :
+          <Button mode="contained" onPress={()=>createList(selectedGroup,name,setLoading,createdGroup,setNameIsInvalid)}>Create</Button>}
+        </View>
+        </Dialog.Content>
+      </Dialog>
+      </Portal>
   )
 }
 
 const styles = StyleSheet.create({
   container:{
-    flex:1,
     padding:20,
     justifyContent:"center"
   },

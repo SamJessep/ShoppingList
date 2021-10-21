@@ -47,3 +47,6 @@ export const ListSchema = {
   },
   primaryKey: '_id',
 };
+
+
+export const MakeSafe = collection=>collection.map(i=>Object.assign(i,{}))

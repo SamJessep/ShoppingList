@@ -149,11 +149,11 @@ const Lists = ({navigation})=>{
         }}
       >List Deleted
       </Snackbar>
-      {createListModalOpen && <CreateListModal closeModal={()=>setCreateListModalOpen(false)} groups={groups} createdGroup={loadList}/>}
-      {createGroupModalOpen && <CreateGroupModal closeModal={()=>setCreateGroupModalOpen(false)} />}
+      <CreateListModal open={createListModalOpen} closeModal={()=>setCreateListModalOpen(false)} groups={groups} createdGroup={loadList}/>
+      <CreateGroupModal open={createGroupModalOpen} closeModal={()=>setCreateGroupModalOpen(false)}/>
       <Portal>
 
-      <Dialog visible={deleteWaring.showDialog} onDismiss={()=>setDeleteWaring({showDialog:false})}>
+      <Dialog visible={deleteWaring.showDialog} onDismiss={deleteWaring.onCancel}>
         <Dialog.Title>Warning</Dialog.Title>
         <Dialog.Content>
           <Paragraph>Are you sure you want to delete {deleteWaring.target}</Paragraph>
