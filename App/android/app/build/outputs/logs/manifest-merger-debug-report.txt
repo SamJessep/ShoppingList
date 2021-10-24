@@ -11,6 +11,7 @@ MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.93.0] C:\Users\Sam\.gr
 MERGED from [:react-native-config] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-config\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-async-storage_async-storage] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-community_checkbox] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\checkbox\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:4:1-49:12
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
@@ -182,6 +183,8 @@ MERGED from [:react-native-async-storage_async-storage] C:\Users\Sam\source\repo
 MERGED from [:react-native-async-storage_async-storage] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-community_checkbox] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\checkbox\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-community_checkbox] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\checkbox\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-10:41
@@ -318,10 +321,18 @@ ADDED from C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\Andr
 		ADDED from C:\Users\Sam\source\repos\ShoppingList\App\android\app\src\debug\AndroidManifest.xml:11:19-83
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.93.0] C:\Users\Sam\.gradle\caches\transforms-3\8cf55bdce16a002612f05f30a64a017a\transformed\jetified-flipper-0.93.0\AndroidManifest.xml:16:5-76
+MERGED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-76
+MERGED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-76
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-76
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-76
 	android:name
 		ADDED from [com.facebook.flipper:flipper:0.93.0] C:\Users\Sam\.gradle\caches\transforms-3\8cf55bdce16a002612f05f30a64a017a\transformed\jetified-flipper-0.93.0\AndroidManifest.xml:16:22-73
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-79
+MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
+MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
+	android:name
+		ADDED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-76
 queries
 ADDED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:5-22:15
 intent#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+data:scheme:https
@@ -370,7 +381,3 @@ category#android.intent.category.DEFAULT
 ADDED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:17-76
 	android:name
 		ADDED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:27-73
-uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
-	android:name
-		ADDED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-76

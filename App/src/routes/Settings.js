@@ -27,7 +27,7 @@ const Settings = ()=>{
     <View style={{flex:1, margin:10}}>
       <View style={styles.control_row}>
         <Text>Server Address</Text>
-        <Text style={{fontWeight:"700"}}>{config.API_URL}</Text>
+        <Text style={{fontWeight:"700"}}>{APP_CONFIG.API_URL}</Text>
       </View>
     </View>
   )

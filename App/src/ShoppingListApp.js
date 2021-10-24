@@ -10,6 +10,8 @@ import Auth0 from 'react-native-auth0';
 import RNSecureKeyStore, {ACCESSIBLE} from "react-native-secure-key-store";
 import { connect } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, Text, Title } from 'react-native-paper';
+import Account from './routes/Auth/Account';
 
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
 const Stack = createNativeStackNavigator();
@@ -40,7 +42,17 @@ const ShoppingListApp = (props) => {
           <>
           {props.needsSetup && <Stack.Screen name="LoadAccount" component={LoadAccount} options={{headerShown:false}}/>}
             <Stack.Screen name="Landing" component={Landing} options={{headerShown:false}}/>
-            <Stack.Screen name="List" component={List} options={({ route }) => ({ title: route.params.list.name })}/>
+            <Stack.Screen name="Account" component={Account}/>
+            <Stack.Screen 
+              name="List" 
+              component={List} 
+              options={
+                ({ route }) => ({
+                  headerTitle: ()=> <Title>{route.params.list.name}</Title>
+                })
+              }
+
+            />
           </>  
           }
           </Stack.Navigator>

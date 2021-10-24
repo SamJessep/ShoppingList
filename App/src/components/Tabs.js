@@ -4,29 +4,27 @@ import Account from '../routes/Auth/Account';
 import Lists from '../routes/Lists/Lists';
 import Settings from '../routes/Settings';
 import Icon from "react-native-dynamic-vector-icons";
+import { Text } from 'react-native-paper';
+import ProfileButton from './ProfileButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
-function Tabs() {
+function Tabs({navigation}) {
+  const [profile, setProfile] = React.useState({})
+  AsyncStorage.getItem("profile")
+    .then(profileString=>setProfile(JSON.parse(profileString)))
+
   return (
     <Tab.Navigator initialRouteName="Lists">
       <Tab.Screen 
         name="Lists" 
         component={Lists}
         options={{
+          headerRight:()=><ProfileButton profile={profile} navigation={navigation}/>,
           tabBarLabel:"Lists",
           tabBarIcon: ({ color, size }) => (
             <Icon type="MaterialCommunityIcons" name="file-document" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen 
-        name="My Account" 
-        component={Account} 
-        options={{
-          tabBarLabel:"Account",
-          tabBarIcon: ({ color, size }) => (
-            <Icon type="MaterialCommunityIcons" name="account" color={color} size={size} />
           ),
         }}
       />

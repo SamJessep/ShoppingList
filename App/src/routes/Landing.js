@@ -5,7 +5,7 @@ import Tabs from "../components/Tabs";
 const Landing = ({navigation})=>{
   return (
     <View style={{flex:1}}>
-      <Tabs></Tabs>
+      <Tabs navigation={navigation}></Tabs>
     </View>
   )
 }

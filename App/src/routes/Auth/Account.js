@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react"
-import { ActivityIndicator, Alert, Button, Image, StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, Alert, Image, StyleSheet, View } from "react-native"
 import Auth0 from 'react-native-auth0';
+import { Button, Text } from "react-native-paper";
 import { connect } from "react-redux";
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
 
@@ -33,7 +34,7 @@ const Account = ({navigation,setLoggedOut})=>{
               <Text>{profile[key]}</Text>
             </View>
         ))}
-        <Button color="red" title="Log out" onPress={LogOut}></Button>
+        <Button color="red" onPress={LogOut} mode="contained">Log out</Button>
       </View>
     }
     </View>

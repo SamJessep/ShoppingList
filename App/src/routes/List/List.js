@@ -13,17 +13,29 @@ import {ItemSchema, ListSchema, MakeSafe} from "../../ObjectSchemas"
 import {BSON} from 'realm';
 import { ActivityIndicator, Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import SyncStatus from '../../SyncStatus';
+import {useNetInfo} from "@react-native-community/netinfo";
+import ProgressCounter from '../../components/ProgressCounter';
 
 
 const {REALM_API_KEY} = config
-const List = ({route})=>{
+const List = ({route, navigation})=>{
   const list = route.params.list
-  const [updating, setUpdating] = React.useState(false)
   const [items, setItems] = React.useState([])
   const [loadingItems, setLoadingItems] = React.useState(true)
-
   const [deleteWaring, setDeleteWaring] = React.useState({showDialog:false})
   const [resetDrag, setResetDrag] = React.useState(false)
+  const [addModalOpen, setAddModalOpen] = React.useState(false)
+  const netInfo = useNetInfo()
+
+  React.useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          onPress={() => setAddModalOpen(true)}
+        >Add Item</Button>
+      )}
+    )
+  })
   
   const realmReference = React.useRef(null);
   React.useEffect(() => {
@@ -139,11 +151,16 @@ const List = ({route})=>{
       onClick:()=>ListItemClicked(listItem)
     }
   });
+
+  const checkedCount = items.filter(i=>i.checked).length
+
   return(
-  <View>
-  <SyncStatus/>
-    <AddItem onAddItem={AddItemToItems} list={list}></AddItem>
-    <View style={styles.divider}></View>
+  <View style={{flex:1}}>
+    <View style={{flexDirection:"row", justifyContent:"space-between", paddingHorizontal:10, alignItems:"center"}}>
+      <ProgressCounter total={items.length} completed={checkedCount} visible={!loadingItems && items.length>0}/>
+      <SyncStatus status={netInfo.isConnected?"online":"offline"}/>
+    </View>
+    <AddItem onAddItem={AddItemToItems} list={list} open={addModalOpen} closeModal={()=>setAddModalOpen(false)} />
     {loadingItems? 
     <View>
       <Text style={styles.loadingText}>Fetching items</Text>
