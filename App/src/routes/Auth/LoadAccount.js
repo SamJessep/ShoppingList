@@ -4,36 +4,30 @@ import Auth0 from "react-native-auth0";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSecureKeyStore, {ACCESSIBLE} from "react-native-secure-key-store";
 const auth0 = new Auth0({ domain: 'dev-j0o6-3-s.au.auth0.com', clientId: 'lugVzLb7SC3bmiD45z0tHc9PLE23ELeQ' });
-
-import config from "react-native-config";
 import { connect } from "react-redux";
 import { Button } from "react-native-paper";
-const CreateProfile = async(profile, userid) =>{
-  url = APP_CONFIG.API_URL+"users/create"
-  await fetch(url,{
-    method:"POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body:JSON.stringify({
-      name:profile.name,
-      email:profile.email,
-      authId:userid
-    })
+import NetInfo from "@react-native-community/netinfo";
+import { mongoAtlas } from "../../RealmApp";
+import { BSON } from "realm";
+
+
+const CreateProfile = async(profile) =>{
+  profile = {
+    _id:BSON.ObjectID.generate(),
+    ...profile
+  }
+  await db("ShoppingList").collection("User").insertOne(profile)
+  await db("ShoppingList").collection("Group").insertOne({
+    name:profile.name+"'s group",
+    members:[profile._id]
   })
 }
 
 const MigrateProfile = async ({sub:authid},userid) =>{
-    url = APP_CONFIG.API_URL+"users/"+userid+"/update"
-    await fetch(url, {
-      method:"POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify({
-        authId:authid
-      })
-    })
+  await db("ShoppingList").collection("User").updateOne(
+    {_id:userid},
+    { $set: { authId: authid } }
+  )
 }
 
 
@@ -43,31 +37,49 @@ const LoadAccount = ({navigation,setSetupComplete,setLoggedOut})=>{
   const [stateText, setStateText] = React.useState("loading")
   const [error, setError] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
+
+  var db
   
   const ResetLogin = ()=>{
-    RNSecureKeyStore.remove("accessToken"),          
+    RNSecureKeyStore.remove("accessToken"),       
     RNSecureKeyStore.remove("refreshToken"),
-    AsyncStorage.removeItem("userId")
+    AsyncStorage.removeItem("authid")
     setLoggedOut()
+  }
+
+  const SaveAccountID  = async (authid)=>{
+    const {_id} = await db("ShoppingList").collection("User").findOne({authId:authid})
+    await AsyncStorage.setItem("userid", String(_id))
   }
   
   const SaveAccount = async (profile,userid)=>{
     await AsyncStorage.setItem("profile",JSON.stringify(profile))
-    await CheckAccount(profile,userid)
-  }
-  const CheckAccount = async (profile,userid)=>{
-    var url = APP_CONFIG.API_URL+"users/email/"+profile.email
-    const users = await fetch(url).then(res=>res.json())
-    if(users.length == 0){
-      setStateText("creating profile...")
-      await CreateProfile(profile,userid)
-    }else{
-      if(users[0].authId != userid){
-        setStateText("migrating profile...")
-        await MigrateProfile(profile, userid)
-      }
+    const ok = await CheckAccount(profile,userid).catch(e=>{throw new Error(e)})
+    if(ok){
+      await SaveAccountID(userid)
+      setSetupComplete()
+      navigation.navigate("Landing")
     }
   }
+  const CheckAccount = async (profile,userid)=>{
+    const users = await db("ShoppingList").collection("User").find({authId:userid})
+    try{
+      if(users.length == 0){
+        setStateText("creating profile...")
+        await CreateProfile(profile,userid)
+      }else{
+        if(users[0].authId != userid){
+          setStateText("migrating profile...")
+          await MigrateProfile(profile, userid)
+        }else return true
+      }
+      return true
+    }
+    catch{
+      return false
+    }
+  }
+    
 
   const FailedLoad = e =>{
     console.error(e)
@@ -75,11 +87,28 @@ const LoadAccount = ({navigation,setSetupComplete,setLoggedOut})=>{
     setLoading(false)
     setStateText(e.toString())
   }
-  React.useEffect(async () => {
+
+  const offlineLoad = async()=>{
     try{
+      const profile = await AsyncStorage.getItem("profile").then(profileString=>JSON.parse(profileString))
+      const userID = await AsyncStorage.getItem("authid")
+      if(profile && userID){
+        setSetupComplete()
+        navigation.navigate("Landing",{userid:userID})
+      }
+    }catch(e){
+      setError(e)
+    }
+  }
+
+  const onlineLoad = async () =>{
+    try{
+      //connect to mongodb
+      const atlas = await mongoAtlas.connect()
+      db = atlas.db
       const accessToken = await RNSecureKeyStore.get("accessToken")
       setStateText("Validating login...")
-      const userid = await AsyncStorage.getItem("userId")
+      const userid = await AsyncStorage.getItem("authid")
       setStateText("checking profile...")
 
       await auth0.auth.userInfo({token:accessToken})
@@ -96,20 +125,43 @@ const LoadAccount = ({navigation,setSetupComplete,setLoggedOut})=>{
           FailedLoad(e)
         }
       })
-      setSetupComplete()
-      navigation.navigate("Landing")
     }
     catch(e){
       FailedLoad(e)
     }
-  }, [])
-  return (
+  }
+
+  const TryLoad = ()=>{
+    setLoading(true)
+    setStateText("Loading")
+    NetInfo.fetch().then(state => {
+      if(state.isConnected){
+        onlineLoad()
+      }else{
+        offlineLoad()
+      }
+    })
+  }
+
+  const Retry = ()=>{
+    setError(false)
+    TryLoad()
+  }
+
+React.useEffect(() => TryLoad(), [])
+return (
     <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
       <Text style={[{marginBottom:20, fontSize:20}, error&&{color:"red"}]}>
         {stateText}
       </Text>
-      {error&&<Button mode="contained" onPress={ResetLogin}>Log out</Button>}
       {loading && <ActivityIndicator size="large"/>}
+      {error ? 
+      <>
+        <Button mode="outline" onPress={Retry} style={{marginBottom:15}}>Retry</Button>
+        <Button mode="outline" onPress={offlineLoad} style={{marginBottom:15}}>Continue offline</Button>
+        <Button mode="contained" onPress={ResetLogin} color="red">Log out</Button>
+      </> : 
+      <Button mode="outline" onPress={ResetLogin}>Cancel</Button>}
     </View>
   )
 }

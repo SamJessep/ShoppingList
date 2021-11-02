@@ -9,7 +9,7 @@ import {
 import config from "react-native-config";
 import HoldList from '../../components/HoldList/HoldList';
 import { realmApp } from '../../RealmApp';
-import {ItemSchema, ListSchema, MakeSafe} from "../../ObjectSchemas"
+import {Schema} from "../../ObjectSchemas"
 import {BSON} from 'realm';
 import { ActivityIndicator, Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import SyncStatus from '../../SyncStatus';
@@ -41,11 +41,12 @@ const List = ({route, navigation})=>{
   React.useEffect(() => {
     const credentials = Realm.Credentials.serverApiKey(REALM_API_KEY)
     realmApp.logIn(credentials).then(()=>{
+      console.log(list._id)
       const config = {
-        schema: [ItemSchema],
+        schema: [Schema.Item, Schema.List],
         sync: {
           user: realmApp.currentUser,
-          partitionValue: list.id,
+          partitionValue: list._id,
           newRealmFileBehavior:{type: "openImmediately"},
           existingRealmFileBehavior:{type: "openImmediately"}
         },
@@ -85,8 +86,9 @@ const List = ({route, navigation})=>{
     };
   }, [realmReference, setItems]);
   
-  const AddItemToItems = async (item,listid) =>{
+  const AddItemToItems = async (item) =>{
     const realm = realmReference.current
+    console.log(item)
     if(realm){
       realm.write(()=>{
         realm.create("Item", {

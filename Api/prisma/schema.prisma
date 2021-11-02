@@ -23,7 +23,6 @@ model User {
 
 model Group {
   id      String @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  key    String
   name    String
   members String[]
   lists   List[]
@@ -32,7 +31,7 @@ model Group {
 
 model List {
   id      String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  key    String
+  partition String
   name    String
   items   Item[]
   group   Group @relation(fields: [groupID], references: [id])
@@ -43,7 +42,6 @@ model List {
 model Item {
   id      String  @id @default(dbgenerated()) @map("_id") @db.ObjectId
   partition String
-  key    String
   name    String
   checked Boolean
   list    List    @relation(fields: [listID], references: [id])

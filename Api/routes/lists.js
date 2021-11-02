@@ -91,6 +91,7 @@ exports.plugin = {
             try{
               res = await prisma.list.create({
                 data:{
+                  partition:"PUBLIC",
                   ...payload,
                   group:{
                     connect:{

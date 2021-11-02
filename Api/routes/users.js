@@ -63,7 +63,7 @@ exports.plugin = {
         }
       });
 
-      //Create User
+      //Update User
       server.route({
         method:"POST",
         path:"/users/{userid}/update",

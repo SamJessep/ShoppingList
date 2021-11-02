@@ -7,41 +7,31 @@ import Icon from "react-native-dynamic-vector-icons";
 import globalStyles from "../../styles/styles"
 import { Button, Dialog, HelperText, Portal, TextInput } from "react-native-paper";
 import uuid from 'react-native-uuid';
+import Realm from 'realm';
 
-const createGroup = async (name,setloading, closeModal,setNameIsInvalid)=>{
-  if(name == "") return setNameIsInvalid(true)
-  try{
-    setloading(true)
-    const userid = await AsyncStorage.getItem("userId")
-    const createRes = await fetch(APP_CONFIG.API_URL+"groups/create", {
-      method:"POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify({
-        name:name,
-        key: uuid.v4()
-      })
-    })
-    if(!createRes.ok) throw new Error(`error code:${createRes.status}. text:${createRes.statusText}`)
-    const group = await createRes.json()
-    ToastAndroid.show("created group: "+group.name, ToastAndroid.SHORT)
-    setloading(false)
-    const newGroups = await fetch(APP_CONFIG.API_URL+"groups/user/"+userid).then(_=>_.json())
-    closeModal(newGroups,group)
-  }catch(e){
-    setloading(false)
-    ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
-    console.error(e)
-  }
-}
 
-const CreateGroupModal = ({open,closeModal})=>{
+const CreateGroupModal = ({open,closeModal, createGroup})=>{
   const [name, setName] = React.useState("")
   const [loading, setloading] = React.useState(false)
   const [nameIsInvalid, setNameIsInvalid] = React.useState(false)
   useBackHandler(()=>closeModal())
-
+  
+  const tryCreateGroup = async ()=>{
+    if(name == "") return setNameIsInvalid(true)
+    setloading(true)
+    const userid = await AsyncStorage.getItem("userid")
+    console.log(userid)
+    const groupID=new Realm.BSON.ObjectID()
+    const group = {
+      _id: groupID,
+      name:name,
+      members:[userid],
+      partition:userid
+    }
+    createGroup(group)
+    setloading(false)
+    closeModal()
+  }
 
 
   return (
@@ -58,7 +48,7 @@ const CreateGroupModal = ({open,closeModal})=>{
               Group name is required
             </HelperText>
             {loading ? <Button mode="contained" loading={loading}>Creating group</Button> :
-            <Button mode="contained" onPress={()=>{createGroup(name,setloading,closeModal,setNameIsInvalid)}}>Create</Button>}
+            <Button mode="contained" onPress={tryCreateGroup}>Create</Button>}
           </View>
         </Dialog.Content>
       </Dialog>

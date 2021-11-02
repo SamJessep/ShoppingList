@@ -14,6 +14,7 @@ MERGED from [:react-native-community_checkbox] C:\Users\Sam\source\repos\Shoppin
 MERGED from [:react-native-community_netinfo] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-community\netinfo\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:4:1-49:12
+MERGED from [:react-native-get-random-values] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-get-random-values\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-safe-area-context] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-screens] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -189,6 +190,8 @@ MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList
 MERGED from [:react-native-picker_picker] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-10:41
 MERGED from [:react-native-auth0] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-auth0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-10:41
+MERGED from [:react-native-get-random-values] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-get-random-values\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-get-random-values] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-get-random-values\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-os] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-os\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-safe-area-context] C:\Users\Sam\source\repos\ShoppingList\App\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41

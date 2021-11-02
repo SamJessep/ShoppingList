@@ -33,7 +33,7 @@ const Login = ({navigation,setLoggedIn})=>{
         Promise.all([
           RNSecureKeyStore.set("accessToken", credentials.accessToken, {accessible:ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY}),          
           RNSecureKeyStore.set("refreshToken", credentials.refreshToken, {accessible:ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY}),
-          AsyncStorage.setItem("userId", jwt.sub)
+          AsyncStorage.setItem("authid", jwt.sub)
         ]).then(()=>{
           setLoggedIn()
           navigation.navigate("LoadAccount")

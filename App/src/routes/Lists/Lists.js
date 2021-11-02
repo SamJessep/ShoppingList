@@ -8,21 +8,30 @@ import CreateGroupModal from "../List/CreateGroupModal.js";
 import HoldList from "../../components/HoldList/HoldList";
 import ActionButton from "./ActionButton.js";
 import Dragable from "../../Dragable.js";
-import { Dialog, Paragraph, Portal, Snackbar, Button, Text } from "react-native-paper";
+import { Dialog, Paragraph, Portal, Snackbar, Button, Text, ActivityIndicator } from "react-native-paper";
 import { useHistory } from "../../customHooks.js";
 import { Picker } from "@react-native-picker/picker";
+import { realmApp, partitionKeys, mongoAtlas } from '../../RealmApp';
+import {Schema} from "../../ObjectSchemas"
+import {BSON} from 'realm';
+import config from "react-native-config";
+const {REALM_API_KEY} = config
 
 
-const fetchUserLists = async uid=>{
-  const lists = await fetch(APP_CONFIG.API_URL+"lists/user/"+uid+"?include=group").then(res=>res.json())
-  return lists
+
+const fetchGroups = async (uid)=>{
+  try{
+    const {db} = await mongoAtlas.connect()
+    const dbUID = "616e76ad009dcba30005f811"
+    const groups = await db("ShoppingList").collection("Group").find({members:{$in:[dbUID]}})
+    return groups
+  }catch(e){
+    console.error(e)
+    console.warn("user may be offline")
+    return []
+  }
 }
 
-
-const fetchGroups = async uid=>{
-  const groups = await fetch(APP_CONFIG.API_URL+"groups/user/"+uid+"?include=lists.items").then(res=>res.json())
-  return groups
-}
 
 const Lists = ({navigation})=>{
   const [loading, setloading] = React.useState(true)
@@ -35,52 +44,95 @@ const Lists = ({navigation})=>{
   const [undoDeleteVisable, setUndoDeleteVisable] = React.useState(false)
   const [resetDrag, setResetDrag] = React.useState(false)
 
-  const [selectedGroupID, setselectedGroupID] = React.useState("ALL")
+  const [selectedGroupID, setselectedGroupID] = React.useState()
   
-  const [allLists, setAllLists] = React.useState([])
   const loadList = async list =>{
-    navigation.navigate("List", {list:list})
+    const safeList = JSON.stringify(list)
+    navigation.navigate("List", {list:JSON.parse(safeList)})
   }
 
-  React.useEffect(async () => {
-    const uid = await AsyncStorage.getItem("userId")
-    Promise.all([
-      fetchUserLists(uid).then(setAllLists),
-      fetchGroups(uid).then(groups=>{setGroups(groups)})
-    ]).then(_=>setloading(false))
-  }, [])
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', async () => {
-      await Refresh()
-    });
-    return unsubscribe;
-  }, [navigation]);
+  const realmReference = React.useRef(null);
 
-  const RemoveListFromDB = async (list,syncLocal=false)=>{
-    const userid = await AsyncStorage.getItem("userId")
-    const newLists = await fetch(APP_CONFIG.API_URL+`lists/${userid}/${list.id}`, {method:"DELETE"})
-    if(syncLocal){
-      await Refresh()
+
+  const openListRealm = async (groupID)=>{
+    groupID=String(groupID)
+    Realm.App.Sync.setLogger(realmApp, (level, message) => console.log(`[${level}] ${message}`));
+    if(realmApp.currentUser === null){
+      const credentials = Realm.Credentials.serverApiKey(REALM_API_KEY)
+      await realmApp.logIn(credentials)
     }
-    return newLists
+    const configGroupID = {
+      schema: [Schema.Item, Schema.List, Schema.Group],
+      sync: {
+        user: realmApp.currentUser,
+        partitionValue: groupID,
+        newRealmFileBehavior:{type: "openImmediately"},
+        existingRealmFileBehavior:{type: "openImmediately"}
+      },
+    };
+    Realm.open(configGroupID)
+    .then(realmInstance => {
+      realmReference.current = realmInstance;
+      const realm = realmReference.current;
+      if (realm) {
+        const sortedLists = realmReference.current
+          .objects('List')
+          .sorted("createdAt",true)
+        setLists([...sortedLists]);
+        sortedLists.addListener(() => {
+          setLists([...sortedLists]);
+        });
+      }
+    })
+    .catch(err => {
+      console.log(`an error occurred opening the realm ${err}`);
+      console.error(err)
+    }).finally(()=>setloading(false));
+
+  }
+  
+  const closeListRealm = async()=>{
+    const realm = realmReference.current;
+    if (realm) {
+      realm.deleteAll()
+      realm.close();
+      // set the reference to null so the realm can't be used after it is closed
+      realmReference.current = null;
+      setLists([]); // set the Items state to an empty array since the component is unmounting
+    }
   }
 
-  const DeleteLists = async (indexes, localOnly=false)=>{
+  React.useEffect(async() => {
+
+    setloading(true)
+    const uid = await AsyncStorage.getItem("userId")
+    const dbGroups = await fetchGroups(uid)
+    setGroups(dbGroups);
+    const credentials = Realm.Credentials.serverApiKey(REALM_API_KEY)
+    await realmApp.logIn(credentials).then(()=>openListRealm(selectedGroupID?selectedGroupID: dbGroups[0]._id))
+    setloading(false)
+    return closeListRealm;
+  }, [realmReference, setLists, selectedGroupID]);
+
+  const RemoveList = async (list)=>{
+    const realm = realmReference.current
+    if(realm){
+      realm.write(()=>{
+        list = realm.objectForPrimaryKey('List', list._id);
+        realm.delete(list)
+        list = null
+      })
+    }
+  }
+
+  const DeleteLists = async (indexes)=>{
     setDeleteWaring({
       showDialog:true,
       target:indexes.length == 1 ? lists[indexes[0]].name : indexes.length+" lists",
       onConfirm:async ()=>{
         var listsToDelete = lists.filter((_,index)=>indexes.includes(index))
-        const newLists = lists.filter((_,index)=>!indexes.includes(index))
-        setLists(newLists)
-        if(indexes.length == 1) setUndoDeleteVisable(true)
-        if(!localOnly){
-          for(let list of listsToDelete){
-            await RemoveListFromDB(list)
-          }
-          await Refresh()
-        }
+        listsToDelete.forEach(list=>RemoveList(list))
         setDeleteWaring({showDialog:false})
       },
       onCancel:()=>{
@@ -91,14 +143,22 @@ const Lists = ({navigation})=>{
     })
   }
 
-  const Refresh = async ()=>{
-    setUpdating(true)
-    const uid = await AsyncStorage.getItem("userId")
-    const dbLists = await fetchUserLists(uid)
-    if(JSON.stringify(dbLists) !== JSON.stringify(lists)){
-      setLists(dbLists)
+  const AddList = list=>{
+    const realm = realmReference.current
+    if(realm){
+      realm.write(()=>{
+        realm.create("List", {
+          _id: new BSON.ObjectID(),
+          ...list
+        })
+      })
     }
-    setUpdating(false)
+  }
+  const AddGroup = async group=>{
+    const {db} = await mongoAtlas.connect()
+    await db("ShoppingList").collection("Group").insertOne(group)
+    const groups = await db("ShoppingList").collection("Group").find()
+    setGroups(groups)
   }
 
   const HandleRowSwipe = async ({direction, extra})=>{
@@ -108,23 +168,13 @@ const Lists = ({navigation})=>{
 
     }
   }
-
-  React.useEffect(() => {
-    if(loading)return 
-    if(selectedGroupID === "ALL"){
-      setLists(allLists)
-    }else{
-      setLists(groups.find(g=>g.id==selectedGroupID).lists)
-    }
-  }, [selectedGroupID,loading])
-  
   var listsElements
   if(!loading){
     if(lists.length > 0){
       listsElements = lists.map(list=>{
         return{
-          key:list.id,
-          component:(<ListCard key={list.id} data={list} loadList={loadList}/>),
+          key:list._id,
+          component:(<ListCard key={list._id} data={list} loadList={loadList}/>),
           onClick:()=>loadList(list)
         }
       })
@@ -132,17 +182,19 @@ const Lists = ({navigation})=>{
   }
   return (
     <View style={{flex:1}}>
-      <Picker mode="dropdown" onValueChange={setselectedGroupID} selectedValue={selectedGroupID}>
-        <Picker.Item key="ALL" value="ALL" label="All lists"/>
+      <Picker mode="dropdown" onValueChange={setselectedGroupID} selectedValue={selectedGroupID} >
         {groups.map(g=>(
-          <Picker.Item key={g.id} value={g.id} label={g.name+"'s lists"}/>
+          <Picker.Item key={g._id} value={String(g._id)} label={g.name+"'s lists"}/>
         ))}
       </Picker>
+      {loading? 
+      <View style={{flexDirection:"row",alignItems:"center", justifyContent:"center"}}>
+        <Text>Loading lists</Text>
+         <ActivityIndicator style={{marginLeft:10}}/>
+      </View> : 
       <HoldList 
-        noItemsComponent={<Text>No Lists</Text>} 
+        noItemsComponent={<Text style={{alignSelf:"center"}}>No Lists</Text>} 
         onDeletePressed={DeleteLists} 
-        onRefresh={Refresh} 
-        refreshable refreshing={updating||loading}
         resetDrag={resetDrag}
         dragableOptions={{
           onSwipeProgress:()=>{},
@@ -151,7 +203,7 @@ const Lists = ({navigation})=>{
         }}
       >
         {listsElements}
-      </HoldList>
+      </HoldList>}
       <ActionButton actions={{
         createList:setCreateListModalOpen,
         createGroup:setCreateGroupModalOpen
@@ -166,8 +218,21 @@ const Lists = ({navigation})=>{
         }}
       >List Deleted
       </Snackbar>
-      <CreateListModal open={createListModalOpen} closeModal={()=>setCreateListModalOpen(false)} groups={groups} createdList={loadList}/>
-      <CreateGroupModal open={createGroupModalOpen} closeModal={()=>setCreateGroupModalOpen(false)}/>
+    
+      
+      <CreateListModal 
+        open={createListModalOpen}
+        openList={loadList} 
+        closeModal={()=>setCreateListModalOpen(false)} 
+        groups={groups} 
+        createList={AddList}
+        openGroupModal={()=>setCreateGroupModalOpen(true)}
+      />
+      <CreateGroupModal 
+        open={createGroupModalOpen} 
+        closeModal={()=>setCreateGroupModalOpen(false)} 
+        createGroup={AddGroup}
+      />
       <Portal>
 
       <Dialog visible={deleteWaring.showDialog} onDismiss={deleteWaring.onCancel}>

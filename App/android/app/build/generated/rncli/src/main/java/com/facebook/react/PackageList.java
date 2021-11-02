@@ -23,6 +23,8 @@ import com.reactnativecommunity.picker.RNCPickerPackage;
 import com.auth0.react.A0Auth0Package;
 // react-native-config
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+// react-native-get-random-values
+import org.linusu.RNGetRandomValuesPackage;
 // react-native-os
 import com.peel.react.rnos.RNOSModule;
 // react-native-safe-area-context
@@ -86,6 +88,7 @@ public class PackageList {
       new RNCPickerPackage(),
       new A0Auth0Package(),
       new ReactNativeConfigPackage(),
+      new RNGetRandomValuesPackage(),
       new RNOSModule(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),

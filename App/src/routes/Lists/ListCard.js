@@ -9,7 +9,7 @@ const ListCard = ({data:list, loadList})=>{
     <View style={styles.card}>
       <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
         <Text style={styles.name}>{list.name}</Text>
-        <Text>{list.items.length} items</Text>
+        {/* <Text>{list.items.length} items</Text> */}
       </View>
       <Text>Created {humanFriendlyTime(secondsSinceCreation)} ago</Text>
       {/* <Text style={styles.groupName}>Group: {list.group.name}</Text> */}

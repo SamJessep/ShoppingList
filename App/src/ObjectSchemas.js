@@ -1,4 +1,4 @@
-export const UserSchema = {
+export const User = {
   name: 'User',
   properties: {
     _id: 'objectId?',
@@ -10,19 +10,19 @@ export const UserSchema = {
   primaryKey: '_id',
 };
 
-export const GroupSchema = {
+export const Group = {
   name: 'Group',
   properties: {
     _id: 'objectId?',
     createdAt: 'date?',
-    key: 'string?',
     members: 'string[]',
     name: 'string?',
+    partition:'string',
   },
   primaryKey: '_id',
 };
 
-export const ItemSchema = {
+export const Item = {
   name: 'Item',
   properties: {
     _id: 'objectId',
@@ -31,15 +31,16 @@ export const ItemSchema = {
     key: 'string',
     listID: 'objectId',
     name: 'string',
-    partition:'string'
+    partition:'string',
   },
   primaryKey: '_id',
 };
 
-export const ListSchema = {
+export const List = {
   name: 'List',
   properties: {
     _id: 'objectId?',
+    partition:  'string', 
     createdAt: 'date?',
     groupID: 'objectId?',
     key: 'string',
@@ -48,5 +49,12 @@ export const ListSchema = {
   primaryKey: '_id',
 };
 
+
+export const Schema = {
+  List,
+  Group,
+  Item,
+  User
+}
 
 export const MakeSafe = collection=>collection.map(i=>Object.assign(i,{}))

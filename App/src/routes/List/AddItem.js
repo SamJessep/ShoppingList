@@ -9,6 +9,7 @@ import uuid from 'react-native-uuid';
 import globalStyles from '../../styles/styles'
 import { Dialog, HelperText, Portal, Text, TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-dynamic-vector-icons';
+import Realm from 'realm';
 
 const AddItem = ({onAddItem:saveItem, list, closeModal, open})=>{
   
@@ -42,14 +43,14 @@ const AddItem = ({onAddItem:saveItem, list, closeModal, open})=>{
   const sendItem = ()=>{
     if(!checkItemInput().hasErrors){
       const item = {
-        partition:list.id,
+        partition:list._id,
         name:text,
         checked:false,
         key:uuid.v4(),
         createdAt:new Date(),
-        listID: new Realm.BSON.ObjectID(list.id)
+        listID: new Realm.BSON.ObjectID(list._id)
       }
-      saveItem(item,list.id)
+      saveItem(item)
       setText("")
       setItemAdded(true)
     }

@@ -1,54 +1,41 @@
 import React from "react";
-import { Pressable, View, Text, Modal,StyleSheet, ToastAndroid,BackHandler } from "react-native";
-import config from "react-native-config";
+import { Pressable, View, Text, StyleSheet } from "react-native";
 import {Picker} from '@react-native-picker/picker';
-import CreateGroupModal from "./CreateGroupModal";
-import { useBackHandler } from '@react-native-community/hooks'
 import Icon from "react-native-dynamic-vector-icons";
-import globalStyles from '../../styles/styles'
-import uuid from 'react-native-uuid';
 import { Button, Dialog, HelperText, Portal, TextInput } from "react-native-paper";
 
-const createList = async (groupid,name, setLoading, createdList, closeModal,setNameIsInvalid)=>{
-  if(name == "")
-  return setNameIsInvalid(true)
-  setLoading(true)
-  try{
-    const list = await fetch(APP_CONFIG.API_URL+"lists/create/"+groupid+"?include=items", {
-      method:"POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify({
-        name:name,
-        key: uuid.v4()
-      })
-    }).then(r=>r.json()).catch(console.error)
-    closeModal()
-    createdList(list)
-  }
-  catch(e){
-    console.error(e)
-    ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
-  }
-  setLoading(false)
-}
 
-const CreateListModal = ({open,closeModal, groups, createdList})=>{
+const CreateListModal = ({open,openList,closeModal, groups, createList, openGroupModal})=>{
   const [name, setName] = React.useState("")
   const [loading, setLoading] = React.useState(false)
-  const [selectedGroup, setSelectedGroup] = React.useState(groups[0] ? groups[0].id:null)
-  const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false)
-  const [usersGroups, setUsersGroups] = React.useState(groups)
+  const [selectedGroup, setSelectedGroup] = React.useState(null)
   const [nameIsInvalid, setNameIsInvalid] = React.useState(false)
+  const [newList, setNewList] = React.useState(null)
+  const [dialogOpen, setDialogOpen] = React.useState(false)
 
 
-  const closeGroupModal = async (newGroups=false, createdGroup)=>{
-    if(newGroups){
-      setUsersGroups(newGroups)
-      setSelectedGroup(createdGroup.id)
+React.useEffect(() => {
+  if(groups.length>0){
+    setSelectedGroup(groups[0]._id)
+  }
+}, [groups])
+
+  const tryCreateList = async ()=>{
+    if(name == "")
+    return setNameIsInvalid(true)
+    setLoading(true)
+    const listID = new Realm.BSON.ObjectId()
+    const list = {
+      _id: listID,
+      name:name,
+      groupID: new Realm.BSON.ObjectId(selectedGroup),
+      partition:String(selectedGroup),
+      key:listID.toHexString()
     }
-    setShowCreateGroupModal(false)
+    setNewList(list)
+    createList(list)
+    setLoading(false)
+    setDialogOpen(true)
   }
 
   return (
@@ -65,25 +52,33 @@ const CreateListModal = ({open,closeModal, groups, createdList})=>{
             List name is required
           </HelperText>
           <Text>Group</Text>
-          {usersGroups.length == 0 ? <Text>You have no groups</Text> :
+          {groups.length == 0 ? <Text>You have no groups</Text> :
           <Picker style={styles.textField}
             mode="dropdown"
             selectedValue={selectedGroup}
-            onValueChange={group =>setSelectedGroup(group)}
+            onValueChange={setSelectedGroup}
           >
-          {usersGroups.map(group=>(
-            <Picker.Item label={group.name} value={group.id} key={group.id}/>
+          {groups.map(group=>(
+            <Picker.Item label={group.name} value={String(group._id)} key={String(group._id)}/>
           ))}
           </Picker>}
-          <Button style={{marginBottom:20}} onPress={()=>setShowCreateGroupModal(!showCreateGroupModal)}>
+          <Button style={{marginBottom:20}} onPress={openGroupModal}>
             Create new group
           </Button>
-          <CreateGroupModal open={showCreateGroupModal} closeModal={closeGroupModal}/>
           
           {loading ? <Button mode="contained" loading={loading}>Creating list</Button> :
-          <Button mode="contained" onPress={()=>createList(selectedGroup,name,setLoading,createdList,closeModal,setNameIsInvalid)}>Create</Button>}
+          <Button mode="contained" onPress={tryCreateList}>Create</Button>}
         </View>
         </Dialog.Content>
+        
+        {newList&&
+        <Dialog visible={open && dialogOpen} onDismiss={()=>setDialogOpen(false)}>
+          <Dialog.Content><Text>Do you want to open "{newList.name}"</Text></Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={()=>{openList(newList); setDialogOpen(false); closeModal()}}>Yes</Button>
+            <Button onPress={()=>setDialogOpen(false)}>No</Button>
+          </Dialog.Actions>
+        </Dialog>}
       </Dialog>
       </Portal>
   )

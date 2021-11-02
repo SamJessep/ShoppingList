@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
-function Tabs({navigation}) {
+function Tabs({navigation, userid}) {
   const [profile, setProfile] = React.useState({})
   AsyncStorage.getItem("profile")
     .then(profileString=>setProfile(JSON.parse(profileString)))
